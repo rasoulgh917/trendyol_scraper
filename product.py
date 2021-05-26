@@ -103,7 +103,7 @@ def get_product_group_stock_sum(product_group_dict, image_cdn):
                 content['url'] = attr_url
                 product_json = get_details_raw_json(attr_url)
                 if product_json == 404:
-                    return product_group_dict
+                    continue
                 content['product_id'] = product_json['product']['id']
                 content['variants'] = get_product_variants(product_json)
     try:
@@ -129,6 +129,7 @@ def get_product_group_stock_sum(product_group_dict, image_cdn):
 
             stock_sum_json.append(group_dict)
     except Exception as exc:
+        print("123")
         logger(exc, mode='exception')
     return stock_sum_json
 
