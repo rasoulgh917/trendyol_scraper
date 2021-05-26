@@ -12,7 +12,7 @@ def logger(msg, mode='warning'):
         logging.info(msg)
 
 def etc(msg):
-    filename = "final_log.log"
+    filename = "search.log"
     if path.exists(filename) == True:
         f = open(filename, "a")
     else:
