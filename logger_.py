@@ -1,5 +1,6 @@
                                                  
 import logging
+from os import path
 logging.basicConfig(filename="log.log", filemode='a', format="\n\n%(asctime)s   %(levelname)s: %(message)s\n")
 
 def logger(msg, mode='warning'):
