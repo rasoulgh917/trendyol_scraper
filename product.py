@@ -129,7 +129,6 @@ def get_product_group_stock_sum(product_group_dict, image_cdn):
 
             stock_sum_json.append(group_dict)
     except Exception as exc:
-        print("123")
         logger(exc, mode='exception')
     return stock_sum_json
 
@@ -194,6 +193,8 @@ def get_product_details(product_link):
             # product_dict_final['product_groups'] = get_product_group_stock(product_group_json)
             product_dict_final['groups_summary'] = get_product_group_stock_sum(
                 product_group_json, product_json['configuration']['cdnUrl'])
+        else:
+            product_dict_final['groups_summary'] = []
         try:
             product_dict_final['product_attributes'] = get_product_attr(product_json['product']['attributes'])
         except:
