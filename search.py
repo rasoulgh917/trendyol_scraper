@@ -13,6 +13,7 @@ from product import get_product_details
 from logger_ import logger
 from save_to_json import to_json
 import get_sim_cross
+from datetime import datetime
 
 # requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
@@ -21,6 +22,10 @@ rq.mount('http', adapter)
 rq.mount('https', adapter)
 
 def list_results(link, cnt, filename):
+    time_ = datetime.now()
+    time_file = open("time_log.log", "w")
+    time_file.write(f"STARTED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
+    time_file.close()
     logger(f"Scraping from {link} started", mode='info')
     count = 0
     # try:
@@ -70,7 +75,15 @@ def list_results(link, cnt, filename):
                 pass
             print(f"Results gotten So far: {count} \r", end='')
             if count == cnt:
+                time_ = datetime.now()
+                time_file = open("time_log.log", "w")
+                time_file.write(f"\nFINISHED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
+                time_file.close()
                 return logger(f"Scraping from {link} finished")
     # except KeyError:
     #     pass
+    time_ = datetime.now()
+    time_file = open("time_log.log", "w")
+    time_file.write(f"\nFINISHED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
+    time_file.close()
     return logger(f"Scraping from {link} finished", mode='info')
