@@ -66,7 +66,8 @@ def list_results(link, cnt, filename):
             product_dict = get_product_details(product_link)
             if product_dict == 404:
                 product_dict = {
-                    "error": "Could not get more information about product, this happens often, and it's because of corrupt / incompataible data sent to crawler. You can check for product details manually by browsing the URL."}                continue
+                    "error": "Could not get more information about product, this happens often, and it's because of corrupt / incompataible data sent to crawler. You can check for product details manually by browsing the URL."}
+                continue
             count = count+1
             to_json(product_dict, filename, count)
             try:
