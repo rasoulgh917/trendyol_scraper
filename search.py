@@ -28,6 +28,7 @@ rq.mount('https', adapter)
 
 
 async def list_results(link, tablename):
+    await asyncio.sleep(0.1)
     print('started scraping from ', link)
     async_list = []
     time_ = datetime.now()
