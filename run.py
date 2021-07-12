@@ -2,5 +2,23 @@
 from search import list_results
 import json
 import sys
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+import requests
+from bs4 import BeautifulSoup
 
-list_results(sys.argv[1], int(sys.argv[2]), sys.argv[3])
+adapter = HTTPAdapter(max_retries=Retry(3))
+rq = requests.Session()
+rq.mount('http', adapter)
+rq.mount('https', adapter)
+
+home_req = rq.get('https://www.trendyol.com/')
+home_soup = BeautifulSoup(home_req.text, 'html.parser')
+cat_list = home_soup.find_all("ul", {'class': 'sub-item-list'})
+subcat_list = []
+for each in cat_list:
+    sub_cats = [('https://www.trendyol.com' + subcat.a['href']) for subcat in each.find_all('li')]
+    subcat_list += sub_cats
+
+for subcats in subcat_list:
+    list_results(subcats, sys.argv[1])

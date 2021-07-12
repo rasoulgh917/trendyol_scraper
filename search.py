@@ -1,9 +1,8 @@
+from gevent import monkey as curious_george
+curious_george.patch_all(thread=False, select=False)
+
 # Import Libs
 from bs4 import BeautifulSoup
-import requests
-from requests.packages.urllib3.util.retry import Retry
-from requests.adapters import HTTPAdapter
-import grequests
 # import requests_cache
 import json
 import sys
@@ -16,14 +15,17 @@ from save_to_json import to_json
 from save_to_db import import_product
 import get_sim_cross
 from datetime import datetime
-
+import requests
+from requests.packages.urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
+import grequests
 # requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
 rq.mount('http', adapter)
 rq.mount('https', adapter)
 
-def list_results(link, cnt, tablename):
+def list_results(link, tablename):
     async_list = []
     time_ = datetime.now()
     time_file = open("time_log.log", "w")

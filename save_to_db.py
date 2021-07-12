@@ -1,9 +1,8 @@
-from db_tools.tables import create_product
+from db_tools import tables, engines
 from sqlalchemy.orm import sessionmaker
-from db_tools.engines import engine
 
 def import_product(tablename, product_dict):
-    product = create_product(tablename)
+    product = tables.create_product(tablename)
     product.product_name = product_dict['product_name']
     product.product_images = product_dict['product_images']
     product.product_brand = product_dict['product_brand']
@@ -22,7 +21,7 @@ def import_product(tablename, product_dict):
     product.product_id = product_dict['product_id']
     product.stock_count = product_dict['variants'][0]['variant_stock_count']
     product.stock_status = product_dict['variants'][0]['variant_stock_status']
-    Session = sessionmaker(bind=engine)
+    Session = sessionmaker(bind=engines.engine)
     session = Session()
     session.add(product)
     session.commit()

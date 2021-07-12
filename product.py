@@ -252,7 +252,7 @@ def get_product_details(product_response, tablename):
                 each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
     except:
         return product_dict_final
-    import_product(tablename, product_dict_final))
+    import_product(tablename, product_dict_final)
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:

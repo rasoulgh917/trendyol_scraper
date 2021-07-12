@@ -1,8 +1,8 @@
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Integer, String, Column, VARCHAR, SmallInteger
 from sqlalchemy.dialects.mysql import LONGTEXT
-from config import CHECKER_TABLE_NAME
-from engines import engine
+from .config import *
+from .engines import engine
 
 Base = declarative_base()
 
