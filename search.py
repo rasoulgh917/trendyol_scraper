@@ -40,7 +40,7 @@ async def list_results(link, tablename):
     elif urlparse(link).query == '':
         link_path = urlunparse(('', '', urlparse(link).path, '', '?', ''))
     try:
-        await total_cnt = rq.get(
+        total_cnt = rq.get(
             f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
     except Exception as exc:
         logger(exc, mode='exception')
