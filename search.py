@@ -1,6 +1,7 @@
 from gevent import monkey as curious_george
 curious_george.patch_all(thread=False, select=False)
-
+import asyncio
+import aiohttp
 # Import Libs
 from bs4 import BeautifulSoup
 # import requests_cache
@@ -25,7 +26,7 @@ rq = requests.Session()
 rq.mount('http', adapter)
 rq.mount('https', adapter)
 
-def list_results(link, tablename):
+async def list_results(link, tablename):
     async_list = []
     time_ = datetime.now()
     time_file = open("time_log.log", "w")
@@ -47,7 +48,7 @@ def list_results(link, tablename):
         total_cnt = rq.get(
             f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
     pages_cnt = round(total_cnt / 24)
-    for i in range(1, pages_cnt - 2):
+    for i in range(1, pages_cnt - 1):
         page_link_path = link_path + "&pi=" + str(i)
         try:
             product_rq = rq.get(
@@ -66,9 +67,11 @@ def list_results(link, tablename):
             product_link_parsed = urlparse(product['url'])
             product_link = urlunparse(
                 ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
+            product_response = rq.get(product_link)
+            async_list.append(product_link)
+            #action_item = grequests.AsyncRequest(url=product_link, session=rq, hooks={'response': get_product_details})
+            #async_list.append(action_item)
 
-            action_item = grequests.AsyncRequest(url=product_link, session=rq, hooks={'response': get_product_details})
-            async_list.append(action_item)
             #product_dict = get_product_details(product_link)
             #count = count+1
             #import_product(tablename, product_dict)
@@ -83,6 +86,8 @@ def list_results(link, tablename):
             #     time_file.write(f"\nFINISHED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
             #     time_file.close()
             #     return logger(f"Scraping from {link} finished")
-    grequests.map(async_list)
+    # grequests.map(async_list)
+    async with aiohttp.ClientSession() as session:
+        await asyncio.gather(*[get_product_details(link) for link in async_list])
 
     return logger(f"Scraping from {link} finished", mode='info')

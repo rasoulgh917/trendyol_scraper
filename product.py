@@ -21,17 +21,17 @@ rq.mount('http', adapter)
 rq.mount('https', adapter)
 
 
-def get_details_raw_json(product_response):
+def get_details_raw_json(product_link):
     # Send request to product endpoint
-    # try:
-    #     req = rq.get(product_link)
-    # except Exception as exc:
-    #     logger(exc, mode='exception')
-    #     logger("Failed to connect to trendyol for product details, retrying ...")
-    #     req = rq.get(product_link)
+    try:
+        req = rq.get(product_link)
+    except Exception as exc:
+        logger(exc, mode='exception')
+        logger("Failed to connect to trendyol for product details, retrying ...")
+        req = rq.get(product_link)
 
     # Load the response into bs4
-    soup = BeautifulSoup(product_response.text, 'html.parser')
+    soup = BeautifulSoup(req.text, 'html.parser')
 
     # Analyze and Extract the data
     try:
@@ -145,9 +145,9 @@ def get_product_attr(attr_dict):
     return attr_list
         
 
-def get_product_details(product_response, tablename):
+async def get_product_details(product_link, tablename):
     # Get product details json
-    product_json = get_details_raw_json(product_response)
+    product_json = get_details_raw_json(product_link)
     if product_json == 404:
         return None
 
