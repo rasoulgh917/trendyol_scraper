@@ -146,6 +146,7 @@ def get_product_attr(attr_dict):
         
 
 async def get_product_details(product_link, tablename):
+    print('started getting product details')
     # Get product details json
     product_json = get_details_raw_json(product_link)
     if product_json == 404:
