@@ -6,6 +6,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import requests
 from bs4 import BeautifulSoup
+import asyncio
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
@@ -20,5 +21,7 @@ for each in cat_list:
     sub_cats = [('https://www.trendyol.com' + subcat.a['href']) for subcat in each.find_all('li')]
     subcat_list += sub_cats
 
-for subcats in subcat_list:
-    list_results(subcats, sys.argv[1])
+async def main():
+    await asyncio.gather(*[list_results(subcat, sys.argv[1])])
+
+async.run`

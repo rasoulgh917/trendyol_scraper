@@ -40,13 +40,14 @@ async def list_results(link, tablename):
     elif urlparse(link).query == '':
         link_path = urlunparse(('', '', urlparse(link).path, '', '?', ''))
     try:
-        total_cnt = rq.get(
+        await total_cnt = rq.get(
             f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
     except Exception as exc:
         logger(exc, mode='exception')
         logger("Failed to connect to trendyol for results fetch, retrying ...")
         total_cnt = rq.get(
             f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
+        print(exc)
     pages_cnt = round(total_cnt / 24)
     for i in range(1, pages_cnt - 1):
         page_link_path = link_path + "&pi=" + str(i)
@@ -67,7 +68,6 @@ async def list_results(link, tablename):
             product_link_parsed = urlparse(product['url'])
             product_link = urlunparse(
                 ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
-            product_response = rq.get(product_link)
             async_list.append(product_link)
             #action_item = grequests.AsyncRequest(url=product_link, session=rq, hooks={'response': get_product_details})
             #async_list.append(action_item)
