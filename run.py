@@ -22,6 +22,6 @@ for each in cat_list:
     subcat_list += sub_cats
 
 async def main():
-    await asyncio.gather(*[list_results(subcat, sys.argv[1]) for sub_cat in subcat_list])
+    await asyncio.gather(*[list_results(subcat, sys.argv[1]) for subcat in subcat_list])
 
 asyncio.run(main())
