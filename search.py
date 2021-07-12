@@ -88,6 +88,6 @@ async def list_results(link, tablename):
             #     return logger(f"Scraping from {link} finished")
     # grequests.map(async_list)
     async with aiohttp.ClientSession() as session:
-        await asyncio.gather(*[get_product_details(link) for link in async_list])
+        await asyncio.gather(*[get_product_details(link, tablename) for link in async_list])
 
     return logger(f"Scraping from {link} finished", mode='info')
