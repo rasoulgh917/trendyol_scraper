@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 from requests.packages.urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
+import grequests
 # import requests_cache
 import json
 import sys
@@ -23,6 +24,7 @@ rq.mount('http', adapter)
 rq.mount('https', adapter)
 
 def list_results(link, cnt, tablename):
+    async_list = []
     time_ = datetime.now()
     time_file = open("time_log.log", "w")
     time_file.write(f"STARTED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
@@ -63,20 +65,22 @@ def list_results(link, cnt, tablename):
             product_link = urlunparse(
                 ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
 
-            product_dict = get_product_details(product_link)
-            if product_dict == 404:
-                continue
-            count = count+1
-            import_product(tablename, product_dict)
-            try:
-                get_sim_cross.runner_func(product_dict['product_id'])
-            except KeyError:
-                pass
-            print(f"Results gotten So far: {count} \r", end='')
-            if count == cnt:
-                time_ = datetime.now()
-                time_file = open("time_log.log", "w")
-                time_file.write(f"\nFINISHED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
-                time_file.close()
-                return logger(f"Scraping from {link} finished")
+            action_item = grequests.AsyncRequest(url=product_link, session=rq, hooks={'response': get_product_details})
+            async_list.append(action_item)
+            #product_dict = get_product_details(product_link)
+            #count = count+1
+            #import_product(tablename, product_dict)
+            # try:
+            #     get_sim_cross.runner_func(product_dict['product_id'])
+            # except KeyError:
+            #     pass
+            #print(f"Results gotten So far: {count} \r", end='')
+            # if count == cnt:
+            #     time_ = datetime.now()
+            #     time_file = open("time_log.log", "w")
+            #     time_file.write(f"\nFINISHED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
+            #     time_file.close()
+            #     return logger(f"Scraping from {link} finished")
+    grequests.map(async_list)
+
     return logger(f"Scraping from {link} finished", mode='info')

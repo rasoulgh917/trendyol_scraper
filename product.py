@@ -10,6 +10,9 @@ from translate import translator
 from logger_ import logger
 import json
 from translate_utils import translate_product
+from save_to_db import import_product
+from random import randint
+import get_sim_cross
 
 #requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
@@ -18,17 +21,17 @@ rq.mount('http', adapter)
 rq.mount('https', adapter)
 
 
-def get_details_raw_json(product_link):
+def get_details_raw_json(product_response):
     # Send request to product endpoint
-    try:
-        req = rq.get(product_link)
-    except Exception as exc:
-        logger(exc, mode='exception')
-        logger("Failed to connect to trendyol for product details, retrying ...")
-        req = rq.get(product_link)
+    # try:
+    #     req = rq.get(product_link)
+    # except Exception as exc:
+    #     logger(exc, mode='exception')
+    #     logger("Failed to connect to trendyol for product details, retrying ...")
+    #     req = rq.get(product_link)
 
     # Load the response into bs4
-    soup = BeautifulSoup(req.text, 'html.parser')
+    soup = BeautifulSoup(product_response.text, 'html.parser')
 
     # Analyze and Extract the data
     try:
@@ -142,11 +145,11 @@ def get_product_attr(attr_dict):
     return attr_list
         
 
-def get_product_details(product_link):
+def get_product_details(product_response, tablename):
     # Get product details json
-    product_json = get_details_raw_json(product_link)
+    product_json = get_details_raw_json(product_response)
     if product_json == 404:
-        return {"error": "Product Details Not found"}
+        return None
 
     # Create a dictionary for storing product details
     product_dict_final = {}
@@ -249,5 +252,11 @@ def get_product_details(product_link):
                 each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
     except:
         return product_dict_final
+    import_product(tablename, product_dict_final))
+    try:
+        get_sim_cross.runner_func(product_dict_final['product_id'])
+    except KeyError:
+        pass
+    print('got a new product, random_number: ', randint(1, 9999))
     # Return Product details dictionary
     return product_dict_final
