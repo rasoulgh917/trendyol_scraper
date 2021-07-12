@@ -21,7 +21,10 @@ for each in cat_list:
     sub_cats = [('https://www.trendyol.com' + subcat.a['href']) for subcat in each.find_all('li')]
     subcat_list += sub_cats
 
+async def caller(subcat, tablename):
+    await list_results(subcat, tablename)
+
 async def main():
-    await asyncio.gather(*[list_results(subcat, sys.argv[1]) for subcat in subcat_list])
+    await asyncio.gather(*[caller(subcat, sys.argv[1]) for subcat in subcat_list])
 
 asyncio.run(main())
