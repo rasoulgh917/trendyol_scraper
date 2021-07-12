@@ -24,4 +24,4 @@ for each in cat_list:
 async def main():
     await asyncio.gather(*[list_results(subcat, sys.argv[1])])
 
-async.run(main())
+asyncio.run(main())
