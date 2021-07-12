@@ -12,6 +12,7 @@ from config import TRANSLATE
 from product import get_product_details
 from logger_ import logger
 from save_to_json import to_json
+from save_to_db import import_product
 import get_sim_cross
 from datetime import datetime
 
@@ -21,14 +22,13 @@ rq = requests.Session()
 rq.mount('http', adapter)
 rq.mount('https', adapter)
 
-def list_results(link, cnt, filename):
+def list_results(link, cnt, tablename):
     time_ = datetime.now()
     time_file = open("time_log.log", "w")
     time_file.write(f"STARTED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
     time_file.close()
     logger(f"Scraping from {link} started", mode='info')
     count = 0
-    # try:
     if urlparse(link).query != '':
         link_path = urlunparse(
             ('', '', urlparse(link).path, '', urlparse(link).query, ''))
@@ -65,11 +65,9 @@ def list_results(link, cnt, filename):
 
             product_dict = get_product_details(product_link)
             if product_dict == 404:
-                product_dict = {
-                    "error": "Could not get more information about product, this happens often, and it's because of corrupt / incompataible data sent to crawler. You can check for product details manually by browsing the URL."}
                 continue
             count = count+1
-            to_json(product_dict, filename, count)
+            import_product(tablename, product_dict)
             try:
                 get_sim_cross.runner_func(product_dict['product_id'])
             except KeyError:
@@ -81,10 +79,4 @@ def list_results(link, cnt, filename):
                 time_file.write(f"\nFINISHED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
                 time_file.close()
                 return logger(f"Scraping from {link} finished")
-    # except KeyError:
-    #     pass
-    time_ = datetime.now()
-    time_file = open("time_log.log", "w")
-    time_file.write(f"\nFINISHED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
-    time_file.close()
     return logger(f"Scraping from {link} finished", mode='info')

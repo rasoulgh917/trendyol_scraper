@@ -171,6 +171,7 @@ def get_product_details(product_link):
     try:
         product_dict_final['product_gender'] = product_json['product']['gender']['name']
     except KeyError:
+        product_dict_final['product_gender'] = None
         pass
     product_dict_final['delivery_info'] = product_json['product']['deliveryInformation']
     if product_json['configuration']['productGroupEnabled']:
