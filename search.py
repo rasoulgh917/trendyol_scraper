@@ -1,36 +1,39 @@
+import grequests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+import requests
+from datetime import datetime
+import get_sim_cross
+from save_to_db import import_product
+from save_to_json import to_json
+from logger_ import logger
+from product import get_product_details
+from config import TRANSLATE
+from translate import translator
+from urllib.parse import urlparse, urlunparse
+import sys
+import json
+from bs4 import BeautifulSoup
+import aiohttp
+import asyncio
 from gevent import monkey as curious_george
 curious_george.patch_all(thread=False, select=False)
-import asyncio
-import aiohttp
 # Import Libs
-from bs4 import BeautifulSoup
 # import requests_cache
-import json
-import sys
-from urllib.parse import urlparse, urlunparse
-from translate import translator
-from config import TRANSLATE
-from product import get_product_details
-from logger_ import logger
-from save_to_json import to_json
-from save_to_db import import_product
-import get_sim_cross
-from datetime import datetime
-import requests
-from requests.packages.urllib3.util.retry import Retry
-from requests.adapters import HTTPAdapter
-import grequests
 # requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
 rq.mount('http', adapter)
 rq.mount('https', adapter)
 
+
 async def list_results(link, tablename):
+    print('started scraping from ', link)
     async_list = []
     time_ = datetime.now()
     time_file = open("time_log.log", "w")
-    time_file.write(f"STARTED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
+    time_file.write(
+        f"STARTED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
     time_file.close()
     logger(f"Scraping from {link} started", mode='info')
     count = 0
@@ -40,25 +43,34 @@ async def list_results(link, tablename):
     elif urlparse(link).query == '':
         link_path = urlunparse(('', '', urlparse(link).path, '', '?', ''))
     try:
-        total_cnt = rq.get(
+        #total_cnt = rq.get(
             f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
+        total_cnt = rq.get(f'https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A
+                           ').json()['result']['totalCount']
     except Exception as exc:
         logger(exc, mode='exception')
         logger("Failed to connect to trendyol for results fetch, retrying ...")
-        total_cnt = rq.get(
+        #total_cnt = rq.get(
             f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
+        total_cnt = rq.get(f'https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A
+                           ').json()['result']['totalCount']
         print(exc)
     pages_cnt = round(total_cnt / 24)
     for i in range(1, pages_cnt - 1):
         page_link_path = link_path + "&pi=" + str(i)
         try:
-            product_rq = rq.get(
+            #product_rq = rq.get(
                 f'https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA')
+            product_rq = rq.get(f'https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A
+                           ').json()['result']['totalCount']
         except Exception as exc:
             logger(exc, mode='exception')
-            logger("Failed to connect to trendyol for product search results fetch, retrying ...")
+            logger(
+                "Failed to connect to trendyol for product search results fetch, retrying ...")
             product_rq = rq.get(
                 f'https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA')
+            product_rq = rq.get(f'https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A
+                           ').json()['result']['totalCount']
         try:
             product_list = product_rq.json()['result']['products']
         except Exception as exc:
@@ -70,7 +82,7 @@ async def list_results(link, tablename):
                 ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
             async_list.append(product_link)
             #action_item = grequests.AsyncRequest(url=product_link, session=rq, hooks={'response': get_product_details})
-            #async_list.append(action_item)
+            # async_list.append(action_item)
 
             #product_dict = get_product_details(product_link)
             #count = count+1
