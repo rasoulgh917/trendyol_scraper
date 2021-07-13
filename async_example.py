@@ -4,6 +4,7 @@ from time import sleep
 
 async def f():
     await asyncio.sleep(2)
+    print(1)
 
 async def g():
     print("g:1")
@@ -11,6 +12,7 @@ async def g():
     print("g:finish")
 
 async def e():
+    sleep(3)
     print('e:between')
 
 async def main():
