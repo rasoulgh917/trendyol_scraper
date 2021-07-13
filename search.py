@@ -28,11 +28,9 @@ rq.mount('http', adapter)
 rq.mount('https', adapter)
 
 async def main(async_list, tablename):
-    print("started scraping the products")
+    print(f"{random.randint(1, 8976)}started scraping the products")
     await asyncio.gather(*[get_product_details(link, tablename) for link in async_list])
     
-def main_caller(async_list, tablename):
-    asyncio.run(main(async_list, tablename))
 def list_results(link, tablename):
     #print('started scraping from ', link)
     async_list = []
@@ -48,19 +46,19 @@ def list_results(link, tablename):
             ('', '', urlparse(link).path, '', urlparse(link).query, ''))
     elif urlparse(link).query == '':
         link_path = urlunparse(('', '', urlparse(link).path, '', '?', ''))
-    try:
-        #total_cnt = rq.get(
-            #f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
-        total_cnt = rq.get(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A").json()['result']['totalCount']
-    except Exception as exc:
-        logger(exc, mode='exception')
-        logger("Failed to connect to trendyol for results fetch, retrying ...")
-        #total_cnt = rq.get(
-            #f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
-        total_cnt = rq.get(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A").json()['result']['totalCount']
-        print(exc)
-    pages_cnt = round(total_cnt / 24)
-    for i in range(1, pages_cnt - 1):
+    # try:
+    #     #total_cnt = rq.get(
+    #         #f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
+    #     total_cnt = rq.get(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A").json()['result']['totalCount']
+    # except Exception as exc:
+    #     logger(exc, mode='exception')
+    #     logger("Failed to connect to trendyol for results fetch, retrying ...")
+    #     #total_cnt = rq.get(
+    #         #f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
+    #     total_cnt = rq.get(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A").json()['result']['totalCount']
+    #     print(exc)
+    #pages_cnt = round(total_cnt / 24)
+    for i in range(1, 208):
         page_link_path = link_path + "&pi=" + str(i)
         try:
             #product_rq = rq.get(
@@ -105,8 +103,8 @@ def list_results(link, tablename):
     # async with aiohttp.ClientSession() as session:
     #     await asyncio.gather(*[get_product_details(link, tablename) for link in async_list])
     print("running async product catch")
+    asyncio.run(main(async_list, tablename))
     
-    main_caller()
     return logger(f"Scraping from {link} finished", mode='info')
 
 # async def list_results_runner(link, tablename):
