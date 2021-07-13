@@ -100,7 +100,7 @@ def list_results(link, tablename):
     # async with aiohttp.ClientSession() as session:
     #     await asyncio.gather(*[get_product_details(link, tablename) for link in async_list])
 
-    #asyncio.run(main(async_list, tablename))
+    asyncio.run(main(async_list, tablename))
 
     return logger(f"Scraping from {link} finished", mode='info')
 
