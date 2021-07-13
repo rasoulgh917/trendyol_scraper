@@ -22,6 +22,7 @@ for each in cat_list:
     subcat_list += sub_cats
 
 async def caller(subcat, tablename):
+    print("started scraping from ", subcat)
     await asyncio.sleep(0.1)
     list_results(subcat, tablename)
 

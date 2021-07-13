@@ -30,7 +30,7 @@ async def main(async_list, tablename):
     await asyncio.gather(*[get_product_details(link, tablename) for link in async_list])
     
 def list_results(link, tablename):
-    print('started scraping from ', link)
+    #print('started scraping from ', link)
     async_list = []
     time_ = datetime.now()
     time_file = open("time_log.log", "w")
