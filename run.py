@@ -22,7 +22,8 @@ for each in cat_list:
     subcat_list += sub_cats
 
 async def caller(subcat, tablename):
-    await list_results(subcat, tablename)
+    await asyncio.sleep(0.1)
+    list_results(subcat, tablename)
 
 async def main():
     await asyncio.gather(*[caller(subcat, sys.argv[1]) for subcat in subcat_list])

@@ -29,8 +29,7 @@ rq.mount('https', adapter)
 async def main(async_list, tablename):
     await asyncio.gather(*[get_product_details(link, tablename) for link in async_list])
     
-async def list_results(link, tablename):
-    await asyncio.sleep(0.1)
+def list_results(link, tablename):
     print('started scraping from ', link)
     async_list = []
     time_ = datetime.now()
@@ -104,3 +103,7 @@ async def list_results(link, tablename):
     asyncio.run(main(async_list, tablename))
 
     return logger(f"Scraping from {link} finished", mode='info')
+
+# async def list_results_runner(link, tablename):
+#     await asyncio.sleep(0.1)
+#     list_results(link, tablename)
