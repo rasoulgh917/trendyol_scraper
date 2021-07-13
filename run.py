@@ -25,7 +25,14 @@ async def caller(subcat, tablename):
     await asyncio.sleep(0.1)
     list_results(subcat, tablename)
 
-async def main():
-    await asyncio.gather(*[caller(subcat, sys.argv[1]) for subcat in subcat_list])
+# async def main():
+#     await asyncio.gather(*[caller(subcat, sys.argv[1]) for subcat in subcat_list])
+loop = asyncio.get_event_loop()
+for subcat in subcat_list:
+    asyncio.ensure_future(caller(subcat, sys.argv[1]))
+try:
+    loop.run_forever()
+except KeyboardInterrupt:
+    loop.close()
 
-asyncio.run(main())
+# asyncio.run(main())
