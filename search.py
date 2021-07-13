@@ -16,6 +16,7 @@ import json
 from bs4 import BeautifulSoup
 import aiohttp
 import asyncio
+import random
 # from gevent import monkey as curious_george
 # curious_george.patch_all(thread=False, select=False)
 # Import Libs
@@ -30,6 +31,8 @@ async def main(async_list, tablename):
     print("started scraping the products")
     await asyncio.gather(*[get_product_details(link, tablename) for link in async_list])
     
+def main_caller(async_list, tablename):
+    asyncio.run(main(async_list, tablename))
 def list_results(link, tablename):
     #print('started scraping from ', link)
     async_list = []
@@ -79,8 +82,8 @@ def list_results(link, tablename):
             product_link_parsed = urlparse(product['url'])
             product_link = urlunparse(
                 ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
-            print("added product to waiting list")
             async_list.append(product_link)
+            print(f"{random.randint(1, 9999)}added product to waiting list")
             #action_item = grequests.AsyncRequest(url=product_link, session=rq, hooks={'response': get_product_details})
             # async_list.append(action_item)
 
@@ -102,8 +105,8 @@ def list_results(link, tablename):
     # async with aiohttp.ClientSession() as session:
     #     await asyncio.gather(*[get_product_details(link, tablename) for link in async_list])
     print("running async product catch")
-    asyncio.run(main(async_list, tablename))
-
+    
+    main_caller()
     return logger(f"Scraping from {link} finished", mode='info')
 
 # async def list_results_runner(link, tablename):
