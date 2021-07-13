@@ -1,4 +1,4 @@
-import grequests
+# import grequests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import requests
@@ -16,8 +16,8 @@ import json
 from bs4 import BeautifulSoup
 import aiohttp
 import asyncio
-from gevent import monkey as curious_george
-curious_george.patch_all(thread=False, select=False)
+# from gevent import monkey as curious_george
+# curious_george.patch_all(thread=False, select=False)
 # Import Libs
 # import requests_cache
 # requests_cache.install_cache('cache', 'sqlite', 120)
