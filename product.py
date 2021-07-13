@@ -13,6 +13,7 @@ from translate_utils import translate_product
 from save_to_db import import_product
 from random import randint
 import get_sim_cross
+import asyncio
 
 #requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
@@ -148,6 +149,7 @@ def get_product_attr(attr_dict):
 async def get_product_details(product_link, tablename):
     print('started getting product details')
     # Get product details json
+    await asyncio.sleep(0.1)
     product_json = get_details_raw_json(product_link)
     if product_json == 404:
         return None
