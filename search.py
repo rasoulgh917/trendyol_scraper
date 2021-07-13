@@ -79,6 +79,7 @@ def list_results(link, tablename):
             product_link_parsed = urlparse(product['url'])
             product_link = urlunparse(
                 ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
+            print("added product to waiting list")
             async_list.append(product_link)
             #action_item = grequests.AsyncRequest(url=product_link, session=rq, hooks={'response': get_product_details})
             # async_list.append(action_item)
@@ -100,7 +101,7 @@ def list_results(link, tablename):
     # grequests.map(async_list)
     # async with aiohttp.ClientSession() as session:
     #     await asyncio.gather(*[get_product_details(link, tablename) for link in async_list])
-
+    print("running async product catch")
     asyncio.run(main(async_list, tablename))
 
     return logger(f"Scraping from {link} finished", mode='info')
