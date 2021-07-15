@@ -2,7 +2,7 @@ from db_tools import tables, engines
 from sqlalchemy.orm import sessionmaker
 
 def import_product(tablename, product_dict):
-    product = tables.create_product(tablename)
+    product = tables.import_product(tablename)
     product.product_name = product_dict['product_name']
     product.product_images = product_dict['product_images']
     product.product_brand = product_dict['product_brand']
