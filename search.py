@@ -46,6 +46,7 @@ async def get_products(page_link, tablename):
     try:
         product_list = product_rq.json()['result']['products']
         async_pages_responses += product_list
+        print("Products response added to converting list: ", len(async_pages_responses), "\r", end="")
     except Exception as exc:
         logger(exc, mode='exception')
     #await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
