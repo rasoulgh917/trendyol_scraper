@@ -1,12 +1,11 @@
 # from pythonzenity import Entry
-from search import caller
+from search import main
 import json
 import sys
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import requests
 from bs4 import BeautifulSoup
-import asyncio
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
@@ -21,9 +20,5 @@ for each in cat_list:
     sub_cats = [('https://www.trendyol.com' + subcat.a['href']) for subcat in each.find_all('li')]
     subcat_list += sub_cats
 
+main(subcat_list, sys.argv[1])
 
-
-async def main():
-     await asyncio.gather(*[caller(subcat, sys.argv[1]) for subcat in subcat_list])
-
-asyncio.run(main())

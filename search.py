@@ -30,10 +30,6 @@ rq.mount('https', adapter)
 async_products = []
 async_pages = []
 
-async def products_fetcher(async_products, tablename):
-    print(f"{random.randint(1, 8976)}started scraping the products")
-    await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
-
 async def get_products(page_link, tablename):
     await asyncio.sleep(0.1)
     products_rq = rq.get(page_link)
@@ -46,13 +42,8 @@ async def get_products(page_link, tablename):
         product_link = urlunparse(
             ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
         async_products.append(product_link)
-    asyncio.run(products_fetcher(async_products, tablename))
-    
+    #await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
 
-async def products_caller(async_pages, tablename):
-    await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
-
-    
 async def list_results(link, tablename):
     time_ = datetime.now()
     time_file = open("time_log.log", "w")
@@ -91,7 +82,6 @@ async def list_results(link, tablename):
             #product_rq = rq.get(
                 #f'https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA')
             async_pages.append(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A")
-    print(f"{random.randint(1, 444)}: started getting products from pages")
         # try:
         #     product_list = product_rq.json()['result']['products']
         # except Exception as exc:
@@ -127,9 +117,13 @@ async def list_results(link, tablename):
 #     await asyncio.sleep(0.1)
 #     list_results(link, tablename)
 
-async def caller(subcat, tablename):
-    print("started scraping from ", subcat)
+async def caller(subcat_list, tablename):
     # await asyncio.sleep(0.1)
-    await list_results(subcat, tablename)
+    await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
+    await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
+    await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
     # asyncio.run(products_caller(async_pages, tablename))
-    await products_caller(async_pages, tablename)
+    # await products_caller(async_pages, tablename)
+
+def main(subcat_list, tablename):
+    asyncio.run(caller(subcat_list, tablename))
