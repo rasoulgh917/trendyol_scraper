@@ -42,6 +42,7 @@ async def get_products(page_link, tablename):
         product_link = urlunparse(
             ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
         async_products.append(product_link)
+        print(len(async_products), "\r", end="")
     #await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
 
 async def list_results(link, tablename):
