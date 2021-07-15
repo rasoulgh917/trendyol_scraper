@@ -29,7 +29,6 @@ rq.mount('https', adapter)
 
 async_products = []
 async_pages = []
-sem = asyncio.Semaphore(10)
 
 async def get_products(page_link, tablename):
     await asyncio.sleep(0.1)
@@ -119,16 +118,17 @@ async def list_results(link, tablename):
 #     await asyncio.sleep(0.1)
 #     list_results(link, tablename)
 
-async def safe_caller(link, tablename):
+async def safe_caller(link, tablename, sem):
     async with sem:
         return await get_product_details(link, tablename)
 
 async def caller(subcat_list, tablename):
     # await asyncio.sleep(0.1)
+    sem = asyncio.Semaphore(500)
     await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
     await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
     print("Final Step: Getting product infos, products count: ", len(async_products))
-    await asyncio.gather(*[safe_caller(link, tablename) for link in async_products])
+    await asyncio.gather(*[safe_caller(link, tablename, sem) for link in async_products])
     # asyncio.run(products_caller(async_pages, tablename))
     # await products_caller(async_pages, tablename)
 
