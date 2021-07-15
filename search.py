@@ -29,20 +29,25 @@ rq.mount('https', adapter)
 
 async_products = []
 async_pages = []
+async_pages_responses = []
+sem = asyncio.Semaphore(10)
+
+async def generate_product_link(product):
+    await asyncio.sleep(0.1)
+    product_link_parsed = urlparse(product['url'])
+    product_link = urlunparse(
+        ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
+    async_products.append(product_link)
+    print("Products added to scraping list: ", len(async_products), "\r", end="")
 
 async def get_products(page_link, tablename):
     await asyncio.sleep(0.1)
     product_rq = rq.get(page_link)
     try:
         product_list = product_rq.json()['result']['products']
+        async_pages_responses += product_list
     except Exception as exc:
         logger(exc, mode='exception')
-    for product in product_list:
-        product_link_parsed = urlparse(product['url'])
-        product_link = urlunparse(
-            ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
-        async_products.append(product_link)
-        print(len(async_products), "\r", end="")
     #await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
 
 async def list_results(link, tablename):
@@ -118,12 +123,17 @@ async def list_results(link, tablename):
 #     await asyncio.sleep(0.1)
 #     list_results(link, tablename)
 
+async def safe_caller(link, tablename):
+    async with sem:
+        return await get_product_details(link, tablename)
+
 async def caller(subcat_list, tablename):
     # await asyncio.sleep(0.1)
     await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
     await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
+    await asyncio.gather(*[generate_product_link(product_res) for product_res in async_pages_responses])
     print("Final Step: Getting product infos, products count: ", len(async_products))
-    await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
+    await asyncio.gather(*[safe_caller(link, tablename) for link in async_products])
     # asyncio.run(products_caller(async_pages, tablename))
     # await products_caller(async_pages, tablename)
 
