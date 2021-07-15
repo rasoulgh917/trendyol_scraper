@@ -46,8 +46,7 @@ async def get_products(page_link, tablename):
     product_rq = rq.get(page_link)
     try:
         product_list = product_rq.json()['result']['products']
-        async_pages_responses.append(1)
-        async_pages_responses.pop()
+        global async_pages_responses
         async_pages_responses += product_list
         print("Products response added to converting list: ", len(async_pages_responses), "\r", end="")
     except Exception as exc:
