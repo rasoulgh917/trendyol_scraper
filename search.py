@@ -32,7 +32,7 @@ async_pages = []
 
 async def get_products(page_link, tablename):
     await asyncio.sleep(0.1)
-    products_rq = rq.get(page_link)
+    product_rq = rq.get(page_link)
     try:
         product_list = product_rq.json()['result']['products']
     except Exception as exc:
