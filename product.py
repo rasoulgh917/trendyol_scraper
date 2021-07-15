@@ -174,6 +174,7 @@ async def get_product_details(product_link, tablename):
         product_json['product']['images'], product_json['configuration']['cdnUrl'])
     product_dict_final['product_id'] = product_json['product']['id']
     product_dict_final['product_seller'] = product_json['product']['merchant']
+    product_dict_final['product_price'] = product_json['product']['price']
     try:
         product_dict_final['product_gender'] = product_json['product']['gender']['name']
     except KeyError:
