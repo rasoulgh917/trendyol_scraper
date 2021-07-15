@@ -27,11 +27,6 @@ rq = requests.Session()
 rq.mount('http', adapter)
 rq.mount('https', adapter)
 
-async_products = []
-async_pages = []
-async_pages_responses = []
-sem = asyncio.Semaphore(10)
-
 async def generate_product_link(product):
     await asyncio.sleep(0.1)
     product_link_parsed = urlparse(product['url'])
@@ -130,6 +125,10 @@ async def safe_caller(link, tablename):
 
 async def caller(subcat_list, tablename):
     # await asyncio.sleep(0.1)
+    async_products = []
+    async_pages = []
+    async_pages_responses = []
+    sem = asyncio.Semaphore(10)
     await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
     await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
     await asyncio.gather(*[generate_product_link(product_res) for product_res in async_pages_responses])
