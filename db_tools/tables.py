@@ -52,7 +52,7 @@ def import_product(tablename):
         # table_name_form = Column(
         #     VARCHAR(255, collation='latin1_swedish_ci'), nullable=True)
 
-    return Product()
+    return Product
 
 
 class Checker(Base):
