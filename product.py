@@ -147,9 +147,9 @@ def get_product_attr(attr_dict):
         
 
 async def get_product_details(product_link, tablename):
-    print(randint(1, 999),": Started getting product info\r", end="")
     # Get product details json
     await asyncio.sleep(0.1)
+    print(randint(1, 999),": Started getting product info\r", end="")
     product_json = get_details_raw_json(product_link)
     if product_json == 404:
         return None
