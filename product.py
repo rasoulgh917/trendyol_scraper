@@ -147,7 +147,7 @@ def get_product_attr(attr_dict):
         
 
 async def get_product_details(product_link, tablename):
-    print('started getting product details')
+    print(randint(1, 999),": Started getting product info\r", end="")
     # Get product details json
     await asyncio.sleep(0.1)
     product_json = get_details_raw_json(product_link)
@@ -256,6 +256,7 @@ async def get_product_details(product_link, tablename):
     except:
         return product_dict_final
     import_product(tablename, product_dict_final)
+    print(randint(1, 999),": Imported product to db\r", end="")
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:
