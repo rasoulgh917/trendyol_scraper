@@ -45,7 +45,7 @@ async def get_products(page_link, tablename):
     await asyncio.sleep(0.1)
     product_rq = rq.get(page_link)
     try:
-        product_list = product_rq.json()['result']['products']
+        product_list = [each['url'] for each in product_rq.json()['result']['products']]
         global async_pages_responses
         async_pages_responses += product_list
         print("Products response added to converting list: ", len(async_pages_responses), "\r", end="")
