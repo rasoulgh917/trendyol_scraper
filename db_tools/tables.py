@@ -7,6 +7,7 @@ from .engines import engine
 Base = declarative_base()
 
 def create(tablename):
+    Base.metadata.clear()
     class Product(Base):
         __tablename__ = tablename
         id = Column(Integer, primary_key=True)
