@@ -146,7 +146,7 @@ def get_product_attr(attr_dict):
     return attr_list
         
 async def translate_and_db(product_dict_final, tablename):
-    await translated_product = translate_product(product_dict_final)
+    translated_product = translate_product(product_dict_final)
     product_dict_final.update(translated_product[0])
     product_dict_final['translated_data'] = []
     product_dict_final['translated_data'].append(
@@ -180,6 +180,7 @@ async def translate_and_db(product_dict_final, tablename):
         product_dict_final['description_images'] = []
     import_product(tablename, product_dict_final)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
+    return 1
 
 
 
