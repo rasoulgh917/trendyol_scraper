@@ -256,7 +256,7 @@ async def get_product_details(product_link, tablename):
                 each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
     except:
         return product_dict_final
-    import_product(tablename, json.dumps(product_dict_final))
+    import_product(tablename, product_dict_final)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])

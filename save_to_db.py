@@ -11,7 +11,7 @@ def import_product(tablename, product_dict):
     product.product_price = str(product_dict['product_price'])
     product.product_attributes = str(product_dict['product_attributes'])
     product.content_descriptions = str(product_dict['content_descriptions'])
-    product.delivery_info = str(product_dict['delivery_info'])
+    product.delivery_info = json.dumps(product_dict['delivery_info'])
     product.groups_summary = str(product_dict['groups_summary'])
     product.product_seller_id = str(product_dict['product_seller']['id'])
     product.product_seller_name = str(product_dict['product_seller']['name'])
