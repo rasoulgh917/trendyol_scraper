@@ -148,7 +148,6 @@ def get_product_attr(attr_dict):
 
 async def get_product_details(product_link, tablename):
     # Get product details json
-    await asyncio.sleep(0.1)
     print(randint(1, 999),": Started getting product info\r", end="")
     product_json = get_details_raw_json(product_link)
     if product_json == 404:
@@ -225,7 +224,7 @@ async def get_product_details(product_link, tablename):
         pass
     except Exception as exc:
         logger(exc, mode='exception')
-    translated_product = translate_product(product_dict_final)
+    translated_product =  await translate_product(product_dict_final)
     product_dict_final.update(translated_product[0])
     product_dict_final['translated_data'] = []
     product_dict_final['translated_data'].append(
