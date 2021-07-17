@@ -1,4 +1,3 @@
-# import grequests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import requests
@@ -17,11 +16,7 @@ from bs4 import BeautifulSoup
 import aiohttp
 import asyncio
 import random
-# from gevent import monkey as curious_george
-# curious_george.patch_all(thread=False, select=False)
-# Import Libs
-# import requests_cache
-# requests_cache.install_cache('cache', 'sqlite', 120)
+
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
 rq.mount('http', adapter)
@@ -43,7 +38,6 @@ async def get_products(page_link, tablename):
             ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
         async_products.append(product_link)
         print("Products added to scraping list: ", len(async_products), "\r", end="")
-    #await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
 
 async def list_results(link, tablename):
     time_ = datetime.now()
