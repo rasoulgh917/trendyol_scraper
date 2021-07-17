@@ -256,12 +256,11 @@ async def get_product_details(product_link, tablename):
                 each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
     except:
         return product_dict_final
-    import_product(tablename, product_dict_final)
-    print(randint(1, 999),": Imported product to db\r", end="")
+    await import_product(tablename, product_dict_final)
+    print("\n",randint(1, 999),": Imported product to db\r", end="")
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:
         pass
-    print('got a new product, random_number: ', randint(1, 9999))
     # Return Product details dictionary
     return product_dict_final

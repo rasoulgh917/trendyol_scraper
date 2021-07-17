@@ -4,10 +4,9 @@ from sqlalchemy.dialects.mysql import LONGTEXT
 from .config import *
 from .engines import engine
 
+Base = declarative_base()
 
 def create(tablename):
-    global Base
-    Base = declarative_base()
     class Product(Base):
         __tablename__ = tablename
         id = Column(Integer, primary_key=True)
