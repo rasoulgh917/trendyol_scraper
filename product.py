@@ -145,8 +145,7 @@ def get_product_attr(attr_dict):
         attr_list.append(attribute_dict)
     return attr_list
         
-async def translate_and_db(product_dict_final):
-    print("started translatinggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg")
+async def translate_and_db(product_dict_final, tablename):
     translated_product = translate_product(product_dict_final)
     product_dict_final.update(translated_product[0])
     product_dict_final['translated_data'] = []
@@ -263,9 +262,7 @@ async def get_product_details(product_link, tablename):
         pass
     except Exception as exc:
         logger(exc, mode='exception')
-    print(1)
-    await translate_and_db(product_dict_final)
-    print(2)
+    await translate_and_db(product_dict_final, tablename)
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:
