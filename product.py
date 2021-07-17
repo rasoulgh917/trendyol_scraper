@@ -263,4 +263,4 @@ async def get_product_details(product_link, tablename):
     except KeyError:
         pass
     # Return Product details dictionary
-    return product_dict_final
+    return json.dumps(product_dict_final)
