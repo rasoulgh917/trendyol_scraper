@@ -1,6 +1,5 @@
 from db_tools import tables, engines
 from sqlalchemy.orm import sessionmaker
-import json
 
 def import_product(tablename, product_dict):
     product = tables.create(tablename)
