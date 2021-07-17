@@ -19,17 +19,17 @@ from time import sleep
 #     await asyncio.gather(g(), e())
 
 # asyncio.run(main())
+
+async def tst(i):
+    await asyncio.sleep(i)
+    return 12
+
 async def c(i):
     print(1)
-    await asyncio.sleep(0.1)
-    print(2)
+    b = await tst(i); print(b)
     return 1
-loop = asyncio.get_event_loop()
-l=[1,2,3,4,5]
-for i in l:
-    asyncio.ensure_future(c(i))
-try:
-    loop.run_forever()
-except KeyboardInterrupt:
-    loop.close()
-#print(*[c(i) for i in l])
+async def main():
+    print("waiting")
+    await asyncio.gather(c(3), c(1), c(1))
+
+asyncio.run(main())

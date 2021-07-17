@@ -1,8 +1,10 @@
 from translate import translator
 from config import TRANSLATE
 from logger_ import logger
+from asyncio import sleep
 
 async def translate_product(product_dict):
+    await sleep(0.1)
     trans_dict_dest = {}
     trans_dict_src = {}
     if TRANSLATE == True:
