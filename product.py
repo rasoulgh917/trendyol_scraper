@@ -260,7 +260,7 @@ async def get_product_details(product_link, tablename):
         pass
     except Exception as exc:
         logger(exc, mode='exception')
-    product_dict_final = await translate_and_db(product_dict_final, tablename); import_product(tablename, product_dict_final); print("\n",randint(1, 999),": Imported product to db\r", end="")
+    await asyncio.sleep(0.1); product_dict_final = translate_and_db(product_dict_final, tablename); import_product(tablename, product_dict_final); print("\n",randint(1, 999),": Imported product to db\r", end="")
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:
