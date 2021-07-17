@@ -123,7 +123,7 @@ async def caller(subcat_list, tablename):
     await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
     print("Final Step: Getting product infos, products count: ", len(async_products))
     # await asyncio.gather(*[safe_caller(link, tablename, sem) for link in async_products])
-    for coro in asyncio.as_completed(*[safe_caller(link, tablename, sem) for link in async_products]):
+    for coro in asyncio.as_completed([safe_caller(link, tablename, sem) for link in async_products]):
         result = await coro
         print(result)
     # asyncio.run(products_caller(async_pages, tablename))
