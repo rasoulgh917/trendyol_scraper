@@ -6,6 +6,7 @@ from .engines import engine
 
 
 def create(tablename):
+    global Base
     Base = declarative_base()
     class Product(Base):
         __tablename__ = tablename
