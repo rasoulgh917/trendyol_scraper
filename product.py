@@ -179,13 +179,13 @@ async def translate_and_db(product_dict_final, tablename):
     except:
         product_dict_final['description_images'] = []
     import_product(tablename, product_dict_final)
-   # print("\n",randint(1, 999),": Imported product to db\r", end="")
+    print("\n",randint(1, 999),": Imported product to db\r", end="")
 
 
 
 async def get_product_details(product_link, tablename):
     # Get product details json
-    #print(randint(1, 999),": Started getting product info\r", end="")
+    print(randint(1, 999),": Started getting product info\r", end="")
     product_json = get_details_raw_json(product_link)
     if product_json == 404:
         return None
