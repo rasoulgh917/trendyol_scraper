@@ -145,42 +145,6 @@ def get_product_attr(attr_dict):
         attr_list.append(attribute_dict)
     return attr_list
         
-def translate_and_db(product_dict_final):
-    translated_product = translate_product(product_dict_final)
-    product_dict_final.update(translated_product[0])
-    product_dict_final['translated_data'] = []
-    product_dict_final['translated_data'].append(
-        {"language": "tr", "data": translated_product[2]})
-    product_dict_final['translated_data'].append(
-        {"language": "en", "data": translated_product[1]})
-
-
-    models_info_dict = {}
-    for des in product_dict_final['content_descriptions']:
-        des['description'].lower().replace("trendyol", "brandyto")
-        if len(des['description'].lower().split('model dimensions')) != 1:
-            try:
-                dim_list = des['description'].lower().split('model dimensions')[
-                    1].partition(":")[2].split('cm')
-                for dim in dim_list:
-                    dim_data = dim.split(":")
-                    models_info_dict[dim_data[0]] = dim_data[1]
-            except:
-                models_info_dict['description'] = des['description']
-    product_dict_final['models_info'] = models_info_dict
-
-    product_dict_final['description_images'] = []
-    try:
-        img_sp = BeautifulSoup(product_json['htmlContent'], "html.parser")
-        for each in img_sp.find_all("img"):
-            product_dict_final['description_images'].append(
-                each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
-    except:
-        return product_dict_final
-    import_product(tablename, product_dict_final)
-    print("\n",randint(1, 999),": Imported product to db\r", end="")
-
-
 
 async def get_product_details(product_link, tablename):
     # Get product details json
@@ -260,9 +224,42 @@ async def get_product_details(product_link, tablename):
         pass
     except Exception as exc:
         logger(exc, mode='exception')
-    await translate_and_db(product_dict_final)
+    translated_product =  await translate_product(product_dict_final)
+    product_dict_final.update(translated_product[0])
+    product_dict_final['translated_data'] = []
+    product_dict_final['translated_data'].append(
+        {"language": "tr", "data": translated_product[2]})
+    product_dict_final['translated_data'].append(
+        {"language": "en", "data": translated_product[1]})
+
+
+    models_info_dict = {}
+    for des in product_dict_final['content_descriptions']:
+        des['description'].lower().replace("trendyol", "brandyto")
+        if len(des['description'].lower().split('model dimensions')) != 1:
+            try:
+                dim_list = des['description'].lower().split('model dimensions')[
+                    1].partition(":")[2].split('cm')
+                for dim in dim_list:
+                    dim_data = dim.split(":")
+                    models_info_dict[dim_data[0]] = dim_data[1]
+            except:
+                models_info_dict['description'] = des['description']
+    product_dict_final['models_info'] = models_info_dict
+
+    product_dict_final['description_images'] = []
+    try:
+        img_sp = BeautifulSoup(product_json['htmlContent'], "html.parser")
+        for each in img_sp.find_all("img"):
+            product_dict_final['description_images'].append(
+                each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
+    except:
+        return product_dict_final
+    import_product(tablename, product_dict_final)
+    print("\n",randint(1, 999),": Imported product to db\r", end="")
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:
         pass
-    return 1
+    # Return Product details dictionary
+    return product_dict_final

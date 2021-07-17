@@ -16,10 +16,7 @@ def import_product(tablename, product_dict):
     product.groups_summary = str(product_dict['groups_summary'])
     product.product_seller_id = str(product_dict['product_seller']['id'])
     product.product_seller_name = str(product_dict['product_seller']['name'])
-    try:
-        product.product_seller_score = str(product_dict['product_seller']['sellerScore'])
-    except:
-        product.product_seller_score = None
+    product.product_seller_score = str(product_dict['product_seller']['sellerScore'])
     product.product_url = str(product_dict['product_url'])
     product.product_variant = str(product_dict['variants'])
     product.product_id = str(product_dict['product_id'])
