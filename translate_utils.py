@@ -2,7 +2,7 @@ from translate import translator
 from config import TRANSLATE
 from logger_ import logger
 
-def translate_product(product_dict):
+async def translate_product(product_dict):
     trans_dict_dest = {}
     trans_dict_src = {}
     if TRANSLATE == True:
