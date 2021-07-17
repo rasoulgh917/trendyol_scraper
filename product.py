@@ -153,7 +153,6 @@ async def translate_and_db(product_dict_final):
         {"language": "tr", "data": translated_product[2]})
     product_dict_final['translated_data'].append(
         {"language": "en", "data": translated_product[1]})
-    
 
 
     models_info_dict = {}
@@ -177,10 +176,9 @@ async def translate_and_db(product_dict_final):
             product_dict_final['description_images'].append(
                 each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
     except:
-        product_dict_final['description_images'] = []
+        return product_dict_final
     import_product(tablename, product_dict_final)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
-    return 1
 
 
 
