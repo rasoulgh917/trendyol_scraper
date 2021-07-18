@@ -117,7 +117,7 @@ async def caller(subcat_list, tablename):
         f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
     time_file.close()
     # await asyncio.sleep(0.1)
-    sem = asyncio.Semaphore(500)
+    sem = asyncio.Semaphore(100)
     await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
     await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
     print("Final Step: Getting product infos, products count: ", len(async_products))
