@@ -124,6 +124,7 @@ async def caller(subcat_list, tablename):
     await asyncio.gather(*[safe_caller(link, tablename, sem) for link in async_products])
     # asyncio.run(products_caller(async_pages, tablename))
     # await products_caller(async_pages, tablename)
+    time_ = datetime.now()
     time_file = open("time_log.log", "a")
     time_file.write(f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: FINISHED SCRAPING\n\n")
 
