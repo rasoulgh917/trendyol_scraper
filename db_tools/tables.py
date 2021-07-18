@@ -22,7 +22,7 @@ def create(tablename):
         product_url = Column(
             LONGTEXT(collation='latin1_swedish_ci'), nullable=True)
         product_id = Column(
-            VARCHAR(255, collation='latin1_swedish_ci'), nullable=True)
+            VARCHAR(255, collation='latin1_swedish_ci'), nullable=True, unique=True)
         product_attributes = Column(
             LONGTEXT(collation='latin1_swedish_ci'), nullable=True)
         content_descriptions = Column(
