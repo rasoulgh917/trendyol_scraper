@@ -14,6 +14,9 @@ from save_to_db import import_product
 from random import randint
 import get_sim_cross
 import asyncio
+from db_tools import tables, engines
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import IntegrityError
 
 #requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
@@ -156,6 +159,16 @@ async def get_product_details(product_link, tablename):
     # Create a dictionary for storing product details
     product_dict_final = {}
 
+    product_dict_final['product_id'] = product_json['product']['id']
+    try:
+        Session = sessionmaker(bind=engines.engine)
+        session = Session()
+        product = tables.create(tablename)
+        product.product_id = product_dict_final['product_id']
+        session.add(product)
+        session.commit()
+    except IntegrityError:
+        return 0
     product_dict_final['variants'] = get_product_variants(product_json)
 
     product_dict_final['product_category'] = product_json['product']['category']['name']
@@ -171,7 +184,6 @@ async def get_product_details(product_link, tablename):
     product_dict_final['product_url'] = product_link
     product_dict_final['product_images'] = convert_img_links(
         product_json['product']['images'], product_json['configuration']['cdnUrl'])
-    product_dict_final['product_id'] = product_json['product']['id']
     product_dict_final['product_seller'] = product_json['product']['merchant']
     product_dict_final['product_price'] = product_json['product']['price']
     try:
