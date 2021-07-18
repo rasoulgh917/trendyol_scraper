@@ -108,7 +108,7 @@ async def list_results(link, tablename):
 
 async def safe_caller(link, tablename, sem):
     async with sem:
-        await get_product_details(link, tablename)
+        return await get_product_details(link, tablename)
 
 async def caller(subcat_list, tablename):
     time_ = datetime.now()
