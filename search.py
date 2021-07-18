@@ -40,12 +40,6 @@ async def get_products(page_link, tablename):
         print("Products added to scraping list: ", len(async_products), "\r", end="")
 
 async def list_results(link, tablename):
-    time_ = datetime.now()
-    time_file = open("time_log.log", "w")
-    time_file.write(
-        f"STARTED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
-    time_file.close()
-    logger(f"Scraping from {link} started", mode='info')
     count = 0
     if urlparse(link).query != '':
         link_path = urlunparse(
@@ -117,6 +111,11 @@ async def safe_caller(link, tablename, sem):
         return await get_product_details(link, tablename)
 
 async def caller(subcat_list, tablename):
+    time_ = datetime.now()
+    time_file = open("time_log.log", "w")
+    time_file.write(
+        f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
+    time_file.close()
     # await asyncio.sleep(0.1)
     sem = asyncio.Semaphore(500)
     await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
@@ -125,6 +124,8 @@ async def caller(subcat_list, tablename):
     await asyncio.gather(*[safe_caller(link, tablename, sem) for link in async_products])
     # asyncio.run(products_caller(async_pages, tablename))
     # await products_caller(async_pages, tablename)
+    time_file = open("time_log.log", "a")
+    time_file.write(f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: FINISHED SCRAPING\n\n")
 
 def main(subcat_list, tablename):
     asyncio.run(caller(subcat_list, tablename))
