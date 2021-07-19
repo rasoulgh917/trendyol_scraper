@@ -16,11 +16,13 @@ from bs4 import BeautifulSoup
 import aiohttp
 import asyncio
 import random
+import headers_
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
 rq.mount('http', adapter)
 rq.mount('https', adapter)
+rq.headers = headers_.headers_rq
 
 async_products = []
 async_pages = []

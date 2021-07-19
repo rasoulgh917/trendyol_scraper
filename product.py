@@ -18,13 +18,14 @@ from db_tools import tables, engines
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
-
+import headers_
 
 #requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
 rq.mount('http', adapter)
 rq.mount('https', adapter)
+rq.headers = headers_.headers_rq
 
 
 def get_details_raw_json(product_link):
