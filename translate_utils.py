@@ -3,6 +3,7 @@ from config import TRANSLATE
 from logger_ import logger
 
 async def translate_product(product_dict):
+    print(randint(1, 999),": Translating")
     trans_dict_dest = {}
     trans_dict_src = {}
     if TRANSLATE == True:
@@ -46,4 +47,5 @@ async def translate_product(product_dict):
                     for var in attr['attribute_variants']:
                         var['variant_name'] = translator(var['variant_name'])
                     attr['product_name'] = translator(attr['product_name'])
+    print("Translation done")
     return [product_dict, trans_dict_dest, trans_dict_src]
