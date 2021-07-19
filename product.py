@@ -258,7 +258,7 @@ async def get_product_details(product_link, tablename):
             product_dict_final['description_images'].append(
                 each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
     except:
-        return product_dict_final
+        pass
     import_product(tablename, product_dict_final)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
     try:
@@ -266,4 +266,4 @@ async def get_product_details(product_link, tablename):
     except KeyError:
         pass
     # Return Product details dictionary
-    return product_dict_final
+    return 1
