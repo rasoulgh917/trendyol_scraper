@@ -159,6 +159,7 @@ async def get_product_details(product_link, tablename):
     product_dict_final = {}
 
     product_dict_final['product_id'] = product_json['product']['id']
+    product = tables.create(tablename)
     exists = product.query.filter_by(product_id=product_dict_final['product_id'])
     if exists:
         return 0
