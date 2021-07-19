@@ -160,14 +160,8 @@ async def get_product_details(product_link, tablename):
     product_dict_final = {}
 
     product_dict_final['product_id'] = product_json['product']['id']
-    try:
-        Session = sessionmaker(bind=engines.engine)
-        session = Session()
-        product = tables.create(tablename)
-        product.product_id = product_dict_final['product_id']
-        session.add(product)
-        session.commit()
-    except IntegrityError:
+    exists = product.query.filter_by(product_id=product_dict_final['product_id'])
+    if exists:
         return 0
     product_dict_final['variants'] = get_product_variants(product_json)
 
