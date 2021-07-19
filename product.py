@@ -230,7 +230,9 @@ async def get_product_details(product_link, tablename):
         pass
     except Exception as exc:
         logger(exc, mode='exception')
+    print(randint(1, 999),": Translating")
     translated_product = translate_product(product_dict_final)
+    print("Translation done")
     product_dict_final.update(translated_product[0])
     product_dict_final['translated_data'] = []
     product_dict_final['translated_data'].append(
