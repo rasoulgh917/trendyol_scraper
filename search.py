@@ -106,10 +106,6 @@ async def list_results(link, tablename):
 #     await asyncio.sleep(0.1)
 #     list_results(link, tablename)
 
-async def safe_caller(link, tablename, sem):
-    async with sem:
-        return await get_product_details(link, tablename)
-
 async def caller(subcat_list, tablename):
     time_ = datetime.now()
     time_file = open("time_log.log", "w")
@@ -117,11 +113,10 @@ async def caller(subcat_list, tablename):
         f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
     time_file.close()
     # await asyncio.sleep(0.1)
-    sem = asyncio.Semaphore(100)
     await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
     await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
     print("Final Step: Getting product infos, products count: ", len(async_products))
-    await asyncio.gather(*[safe_caller(link, tablename, sem) for link in async_products])
+    await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
     # asyncio.run(products_caller(async_pages, tablename))
     # await products_caller(async_pages, tablename)
     time_ = datetime.now()
