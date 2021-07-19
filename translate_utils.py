@@ -1,6 +1,7 @@
 from translate import translator
 from config import TRANSLATE
 from logger_ import logger
+from random import randint
 
 async def translate_product(product_dict):
     print(randint(1, 999),": Translating")
