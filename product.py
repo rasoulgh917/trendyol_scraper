@@ -17,6 +17,8 @@ import asyncio
 from db_tools import tables, engines
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import select
+
 
 #requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
@@ -159,10 +161,6 @@ async def get_product_details(product_link, tablename):
     product_dict_final = {}
 
     product_dict_final['product_id'] = product_json['product']['id']
-    product = tables.create(tablename)
-    exists = product.query.filter_by(product_id=product_dict_final['product_id'])
-    if exists:
-        return 0
     product_dict_final['variants'] = get_product_variants(product_json)
 
     product_dict_final['product_category'] = product_json['product']['category']['name']
