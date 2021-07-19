@@ -3,7 +3,7 @@ from config import TRANSLATE
 from logger_ import logger
 from random import randint
 
-async def translate_product(product_dict):
+def translate_product(product_dict):
     print(randint(1, 999),": Translating")
     trans_dict_dest = {}
     trans_dict_src = {}
