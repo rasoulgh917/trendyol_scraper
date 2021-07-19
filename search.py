@@ -26,6 +26,7 @@ async_products = []
 async_pages = []
 
 async def get_products(page_link, tablename):
+    product_list = []
     await asyncio.sleep(0.1)
     product_rq = rq.get(page_link)
     try:
