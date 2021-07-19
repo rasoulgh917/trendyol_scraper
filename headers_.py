@@ -8,7 +8,7 @@ headers_rq = {
     "referer": "https://www.trendyol.com/",
     "sec-fetch-dest": "document",
     "sec-fetch-mode": "navigate",
-    "upgrade-insecure-requests": 1,
+    "upgrade-insecure-requests": "1",
     "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
 }
 
