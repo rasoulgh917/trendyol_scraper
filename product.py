@@ -190,13 +190,13 @@ async def get_product_details(product_link, tablename):
         product_group_id = product_json['product']['productGroupId']
         try:
             req_product_group = rq.get(
-                f'https://api.trendyol.com/webproductgw/api/productGroup/{product_group_id}?storefrontId=1&culture=tr-TR')
+                f'https://public-mdc.trendyol.com/discovery-web-productgw-service/api/productGroup/{product_group_id}?storefrontId=1&culture=tr-TR')
         except Exception as exc:
             logger(exc, mode='exception')
             logger(
                 "Failed to connect to trendyol for product group details, retrying ...")
             req_product_group = rq.get(
-                f'https://api.trendyol.com/webproductgw/api/productGroup/{product_group_id}?storefrontId=1&culture=tr-TR')
+                f'https://public-mdc.trendyol.com/discovery-web-productgw-service/api/productGroup/{product_group_id}?storefrontId=1&culture=tr-TR')
         try:
             product_group_json = req_product_group.json()[
                 'result']['slicingAttributes']
