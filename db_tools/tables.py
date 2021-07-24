@@ -16,7 +16,7 @@ def create(tablename):
         product_images = Column(
             String(4294967295, collation='latin1_swedish_ci'), nullable=True)
         product_brand = Column(
-            VARCHAR(255, collation='latin1_swedish_ci'), nullable=True)
+            VARCHAR(255, collation='utf8mb4_turkish_ci'), nullable=True)
         product_category = Column(
             VARCHAR(255, collation='latin1_swedish_ci'), nullable=True)
         product_url = Column(
@@ -44,7 +44,7 @@ def create(tablename):
         stock_count = Column(
             VARCHAR(5, collation='latin1_swedish_ci'), nullable=True)
         delivery_info = Column(
-            VARCHAR(255, collation='latin1_swedish_ci'), nullable=True)
+            VARCHAR(255, collation='utf8mb4_turkish_ci'), nullable=True)
         product_variant = Column(
             LONGTEXT(collation='latin1_swedish_ci'), nullable=True)
         groups_summary = Column(
