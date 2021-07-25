@@ -1,0 +1,2 @@
+echo "$1 $2"
+tmux new -d "python3.9 search.py $1 $2"
