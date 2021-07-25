@@ -85,9 +85,6 @@ def get_product_variants(product_json):
         var['attributeName'] = translator(
             var['attributeName'])
         var_dict['variant_name'] = var['attributeName']
-        if not len(var['attributeValue']) in [1, 2, 3]:
-            var['attributeValue'] = translator(
-                var['attributeValue'])
         var_dict['variant_value'] = var['attributeValue']
         var_dict['variant_type'] = var['attributeType']
         var_dict['variant_price'] = var['price']
