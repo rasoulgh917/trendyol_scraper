@@ -251,9 +251,7 @@ async def get_product_details(product_link, tablename):
 
     print(randint(1, 999),": Translating")
     if TRANSLATE == True:
-        for language in TRANS_LANGS:
-            translated_product = translate_product(product_dict_final, language)
-            import_product(f"{language}_{tablename}", translated_product)
+        await asynio.gather(*[translate_product(product_dict_final, language, tablename) for language in TRANS_LANGS])
     import_product(tablename, product_dict_final)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
     
