@@ -49,18 +49,6 @@ async def list_results(link, tablename):
             ('', '', urlparse(link).path, '', urlparse(link).query, ''))
     elif urlparse(link).query == '':
         link_path = urlunparse(('', '', urlparse(link).path, '', '?', ''))
-    # try:
-    #     #total_cnt = rq.get(
-    #         #f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
-    #     total_cnt = rq.get(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A").json()['result']['totalCount']
-    # except Exception as exc:
-    #     logger(exc, mode='exception')
-    #     logger("Failed to connect to trendyol for results fetch, retrying ...")
-    #     #total_cnt = rq.get(
-    #         #f"https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA").json()['result']['totalCount']
-    #     total_cnt = rq.get(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A").json()['result']['totalCount']
-    #     print(exc)
-    #pages_cnt = round(total_cnt / 24)
     for i in range(1, 208):
         page_link_path = link_path + "&pi=" + str(i)
         try:
@@ -74,59 +62,15 @@ async def list_results(link, tablename):
             #product_rq = rq.get(
                 #f'https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA')
             async_pages.append(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A")
-        # try:
-        #     product_list = product_rq.json()['result']['products']
-        # except Exception as exc:
-        #     logger(exc, mode='exception')
-        #     continue
-        # for product in product_list:
-        #     product_link_parsed = urlparse(product['url'])
-        #     product_link = urlunparse(
-        #         ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
-        #     async_products.append(product_link)
-            #action_item = grequests.AsyncRequest(url=product_link, session=rq, hooks={'response': get_product_details})
-            # async_products.append(action_item)
 
-            #product_dict = get_product_details(product_link)
-            #count = count+1
-            #import_product(tablename, product_dict)
-            # try:
-            #     get_sim_cross.runner_func(product_dict['product_id'])
-            # except KeyError:
-            #     pass
-            #print(f"Results gotten So far: {count} \r", end='')
-            # if count == cnt:
-            #     time_ = datetime.now()
-            #     time_file = open("time_log.log", "w")
-            #     time_file.write(f"\nFINISHED SCRAPING FROM {link}: {time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}")
-            #     time_file.close()
-            #     return logger(f"Scraping from {link} finished")
-    # grequests.map(async_products)
-    # async with aiohttp.ClientSession() as session:
-    #     await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
-
-# async def list_results_runner(link, tablename):
-#     await asyncio.sleep(0.1)
-#     list_results(link, tablename)
-
-async def caller(subcat_list, tablename):
-    time_ = datetime.now()
-    time_file = open("time_log.log", "w")
-    time_file.write(
-        f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
-    time_file.close()
+async def caller(subcat, tablename):
     # await asyncio.sleep(0.1)
-    await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
+    await asyncio.gather(list_results(subcat, tablename))
     await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
     print("Final Step: Getting product infos, products count: ", len(async_products))
     await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
-    # asyncio.run(products_caller(async_pages, tablename))
-    # await products_caller(async_pages, tablename)
-    time_ = datetime.now()
-    time_file = open("time_log.log", "a")
-    time_file.write(f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: FINISHED SCRAPING\n\n")
 
-def main(subcat_list, tablename):
-    asyncio.run(caller(subcat_list, tablename))
+def main(subcat, tablename):
+    asyncio.run(caller(subcat, tablename))
 
 main(sys.argv[1], sys.argv[2])

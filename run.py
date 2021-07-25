@@ -7,6 +7,7 @@ from requests.packages.urllib3.util.retry import Retry
 import requests
 from bs4 import BeautifulSoup
 import os
+import datetime
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
@@ -23,6 +24,11 @@ for each in cat_list:
 
 
 count = 0
+time_ = datetime.now()
+time_file = open("time_log.log", "w")
+time_file.write(
+    f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
+time_file.close()
 for each in subcat_list:
     os.system(f"""tmux new -d "python3.9 search.py {each} {tablename}" """)
     count += 1
