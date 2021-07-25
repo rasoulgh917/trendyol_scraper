@@ -50,3 +50,4 @@ async def translate_call(product_dict, tablename):
             import_product(f"{dest}_{tablename}", translated_product)
     import_product(tablename, product_dict)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
+    return 1
