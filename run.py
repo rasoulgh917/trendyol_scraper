@@ -37,3 +37,5 @@ for each in subcat_list:
         print("Total tmux sessions created: ", count)
         tmp_list.clear()
     tmp_list.append(each)
+
+input()
