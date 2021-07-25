@@ -9,7 +9,7 @@ import json
 from translate import translator
 from logger_ import logger
 import json
-from translate_utils import translate_call
+from translate_utils import translate_product
 from random import randint
 import get_sim_cross
 import asyncio
@@ -18,6 +18,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
 import headers_
+from config import TRANSLATE, TRANS_LANGS
 
 #requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
@@ -148,6 +149,7 @@ def get_product_attr(attr_dict):
 
 async def get_product_details(product_link, tablename):
     # Get product details json
+    await asyncio.sleep(0.1)
     product_json = get_details_raw_json(product_link)
     if product_json == 404:
         return None
@@ -246,7 +248,13 @@ async def get_product_details(product_link, tablename):
     except:
         pass
 
-    await translate_call(product_dict_final, tablename)
+    print(randint(1, 999),": Translating")
+    if TRANSLATE == True:
+        for language in TRANS_LANGS:
+            translated_product = translate_product(product_dict, language)
+            import_product(f"{language}_{tablename}", translated_product)
+    import_product(tablename, product_dict)
+    print("\n",randint(1, 999),": Imported product to db\r", end="")
     
     
     # print("Translation done")
