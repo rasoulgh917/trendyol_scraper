@@ -22,7 +22,7 @@ def connect_translate(text: str, dest: str):
     except NotValidLength:
         return text
     except exceptions.ConnectionError:
-        return GoogleTranslator(source='tr', target=dest').translate(text)
+        return GoogleTranslator(source='tr', target=dest).translate(text)
     except:
         return GoogleTranslator(source='tr', target=dest).translate(text)
 

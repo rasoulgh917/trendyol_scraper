@@ -53,7 +53,7 @@ async def translate_product(product_dict, dest, tablename):
     import_product(f"{dest}_{tablename}")
 
 
-def translate_call(product_dict, tablename):
+async def translate_call(product_dict, tablename):
     if TRANSLATE == True:
         await asyncio.gather(*[translate_product(product_dict, language, tablename) for language in TRANS_LANGS])
-    import_product(tablename, product_dict))
+    import_product(tablename, product_dict)
