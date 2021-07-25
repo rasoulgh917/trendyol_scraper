@@ -34,7 +34,7 @@ def translator(text: str, dest: str):
         return text
     except ValueError:
         if re.get(f"{dest}_{text}"):
-            return re.get(text).decode()
+            return re.get(f"{dest}_{text}").decode()
         else:
             translated_text = connect_translate(text, dest)
             re.set(f"{dest}_{text}", translated_text)
