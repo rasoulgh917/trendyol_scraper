@@ -245,9 +245,8 @@ async def get_product_details(product_link, tablename):
                 each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
     except:
         pass
-    print(randint(1, 999),": Translating")
 
-    translate_call(product_dict_final, tablename)
+    await translate_call(product_dict_final, tablename)
     
     
     # print("Translation done")
@@ -257,7 +256,7 @@ async def get_product_details(product_link, tablename):
     #     {"language": "tr", "data": translated_product[2]})
     # product_dict_final['translated_data'].append(
     #     {"language": "en", "data": translated_product[1]})
-    print("\n",randint(1, 999),": Imported product to db\r", end="")
+    
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:

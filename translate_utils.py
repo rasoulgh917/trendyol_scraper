@@ -42,9 +42,11 @@ def translate_product(product_dict, dest):
     return product_dict
 
 
-def translate_call(product_dict, tablename):
+async def translate_call(product_dict, tablename):
+    print(randint(1, 999),": Translating")
     if TRANSLATE == True:
         for language in TRANS_LANGS:
             translated_product = translate_product(product_dict, language)
             import_product(f"{dest}_{tablename}", translated_product)
     import_product(tablename, product_dict)
+    print("\n",randint(1, 999),": Imported product to db\r", end="")
