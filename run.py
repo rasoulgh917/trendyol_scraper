@@ -30,7 +30,7 @@ time_file.write(
 time_file.close()
 tmp_list = []
 for each in subcat_list:
-    while len(tmp_list) == 2:
+    while len(tmp_list) == 3:
         subprocess.Popen(["tmux", "new", "-d", "python3.9", "search.py", tmp_list, sys.argv[1]])
         count += 1
         print("Total tmux sessions created: ", count)
