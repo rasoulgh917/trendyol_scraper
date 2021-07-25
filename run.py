@@ -6,6 +6,7 @@ from requests.packages.urllib3.util.retry import Retry
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+import subprocess
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
