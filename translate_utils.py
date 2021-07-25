@@ -39,7 +39,7 @@ def translate_product(product_dict, dest, tablename):
                     var['variant_name'] = translator(var['variant_name'], dest)
                 attr['product_name'] = translator(attr['product_name'], dest)
 
-    import_product(f"{dest}_{tablename}")
+    import_product(f"{dest}_{tablename}", product_dict)
 
 
 def translate_call(product_dict, tablename):
