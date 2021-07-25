@@ -1,5 +1,4 @@
 # from pythonzenity import Entry
-from search import main
 import json
 import sys
 from requests.adapters import HTTPAdapter
