@@ -32,7 +32,7 @@ time_file.close()
 tmp_list = []
 for each in subcat_list:
     while len(tmp_list) == 3:
-        os.system(f"create_instance {tmp_list} {sys.argv[1]}")
+        os.system(f"./create_instance {tmp_list} {sys.argv[1]}")
         count += 1
         print("Total tmux sessions created: ", count)
         tmp_list.clear()
