@@ -17,6 +17,7 @@ import aiohttp
 import asyncio
 import random
 import headers_
+from ast import literal_eval
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
@@ -63,14 +64,25 @@ async def list_results(link, tablename):
                 #f'https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA')
             async_pages.append(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A")
 
-async def caller(subcat, tablename):
+async def caller(subcat_list, tablename):
+    time_ = datetime.now()
+    time_file = open("time_log.log", "w")
+    time_file.write(
+        f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
+    time_file.close()
     # await asyncio.sleep(0.1)
-    await asyncio.gather(list_results(subcat, tablename))
+    await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
     await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
     print("Final Step: Getting product infos, products count: ", len(async_products))
     await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
+    # asyncio.run(products_caller(async_pages, tablename))
+    # await products_caller(async_pages, tablename)
+    time_ = datetime.now()
+    time_file = open("time_log.log", "a")
+    time_file.write(f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: FINISHED SCRAPING\n\n")
 
-def main(subcat, tablename):
-    asyncio.run(caller(subcat, tablename))
+def main(subcat_list, tablename):
+    asyncio.run(caller(subcat_list, tablename))
 
-main(sys.argv[1], sys.argv[2])
+subcat_list = literal_eval(sys.argv[1])
+main(subcat_list, sys.argv[2])
