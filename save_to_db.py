@@ -33,5 +33,3 @@ def import_product(tablename, product_dict):
             product.product_seller_score = None
     except IntegrityError:
         session.rollback()
-    except:
-        pass
