@@ -27,7 +27,7 @@ rq.mount('https', adapter)
 rq.headers = headers_.headers_rq
 
 
-def get_details_raw_json(product_link):
+async def get_details_raw_json(product_link):
     # Send request to product endpoint
     try:
         req = rq.get(product_link)
@@ -147,9 +147,8 @@ def get_product_attr(attr_dict):
         
 
 async def get_product_details(product_link, tablename):
-    await asyncio.sleep(0.1)
     # Get product details json
-    product_json = get_details_raw_json(product_link)
+    product_json = await get_details_raw_json(product_link)
     if product_json == 404:
         return None
 
