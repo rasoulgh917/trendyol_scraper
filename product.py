@@ -9,8 +9,7 @@ import json
 from translate import translator
 from logger_ import logger
 import json
-from translate_utils import translate_product
-from save_to_db import import_product
+from translate_utils import translate_call
 from random import randint
 import get_sim_cross
 import asyncio
@@ -230,17 +229,6 @@ async def get_product_details(product_link, tablename):
         pass
     except Exception as exc:
         logger(exc, mode='exception')
-    print(randint(1, 999),": Translating")
-    translated_product = translate_product(product_dict_final)
-    print("Translation done")
-    product_dict_final.update(translated_product[0])
-    product_dict_final['translated_data'] = []
-    product_dict_final['translated_data'].append(
-        {"language": "tr", "data": translated_product[2]})
-    product_dict_final['translated_data'].append(
-        {"language": "en", "data": translated_product[1]})
-
-
     models_info_dict = {}
     for des in product_dict_final['content_descriptions']:
         des['description'].lower().replace("trendyol", "brandyto")
@@ -263,7 +251,18 @@ async def get_product_details(product_link, tablename):
                 each['data-src'].replace("{cdn_url}", product_json['configuration']['cdnUrl']))
     except:
         pass
-    import_product(tablename, product_dict_final)
+    print(randint(1, 999),": Translating")
+
+    translate_call(product_dict_final, tablename)
+    
+    
+    # print("Translation done")
+    # product_dict_final.update(translated_product[0])
+    # product_dict_final['translated_data'] = []
+    # product_dict_final['translated_data'].append(
+    #     {"language": "tr", "data": translated_product[2]})
+    # product_dict_final['translated_data'].append(
+    #     {"language": "en", "data": translated_product[1]})
     print("\n",randint(1, 999),": Imported product to db\r", end="")
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])

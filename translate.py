@@ -12,30 +12,30 @@ from config import REDIS_SERVER_HOST, REDIS_SERVER_PORT, TRANSLATE
 if TRANSLATE:
     re = Redis(host=REDIS_SERVER_HOST, port=REDIS_SERVER_PORT, db=0)
 
-def connect_translate(text: str):
+def connect_translate(text: str, dest: str):
     try:
-        return GoogleTranslator(source='tr', target='en').translate(text)
+        return GoogleTranslator(source='tr', target=dest).translate(text)
     except NotValidPayload:
         return text
     except ConnectionError:
-        return GoogleTranslator(source='tr', target='en').translate(text)
+        return GoogleTranslator(source='tr', target=dest).translate(text)
     except NotValidLength:
         return text
     except exceptions.ConnectionError:
-        return GoogleTranslator(source='tr', target='en').translate(text)
+        return GoogleTranslator(source='tr', target=dest').translate(text)
     except:
-        return GoogleTranslator(source='tr', target='en').translate(text)
+        return GoogleTranslator(source='tr', target=dest).translate(text)
 
-def translator(text: str):
+def translator(text: str, dest: str):
     if not TRANSLATE:
         return text
     try:
         int(text)
         return text
     except ValueError:
-        if re.get(text):
+        if re.get(f"{dest}_{text}"):
             return re.get(text).decode()
         else:
-            translated_text = connect_translate(text)
-            re.set(text, translated_text)
+            translated_text = connect_translate(text, dest)
+            re.set(f"{dest}_{text}", translated_text)
         return translated_text
