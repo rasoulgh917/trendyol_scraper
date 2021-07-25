@@ -82,8 +82,6 @@ def get_product_variants(product_json):
     product_variants = product_json['product']['variants']
     for var in product_variants:
         var_dict = {}
-        var['attributeName'] = translator(
-            var['attributeName'])
         var_dict['variant_name'] = var['attributeName']
         var_dict['variant_value'] = var['attributeValue']
         var_dict['variant_type'] = var['attributeType']
