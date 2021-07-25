@@ -5,8 +5,7 @@ from random import randint
 import asyncio
 from save_to_db import import_product
 
-async def translate_product(product_dict, dest, tablename):
-    await asyncio.sleep(0.1)
+def translate_product(product_dict, dest, tablename):
     trans_dict_dest = {}
     trans_dict_src = {}
     trans_dict_src['product_name'] = product_dict['product_name']
@@ -53,7 +52,8 @@ async def translate_product(product_dict, dest, tablename):
     import_product(f"{dest}_{tablename}")
 
 
-async def translate_call(product_dict, tablename):
+def translate_call(product_dict, tablename):
     if TRANSLATE == True:
-        await asyncio.gather(*[translate_product(product_dict, language, tablename) for language in TRANS_LANGS])
+        for language in TRANS_LANGS:
+            translate_product(product_dict, language, tablename)
     import_product(tablename, product_dict)
