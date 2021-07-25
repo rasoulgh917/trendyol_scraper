@@ -5,8 +5,8 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import requests
 from bs4 import BeautifulSoup
-import os
 from datetime import datetime
+import subprocess
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
@@ -31,7 +31,7 @@ time_file.close()
 tmp_list = []
 for each in subcat_list:
     while len(tmp_list) == 2:
-        os.system(f"""tmux new -d "python3.9 search.py {tmp_list} {sys.argv[1]}" """)
+        subprocess.Popen(["tmux", "new", "-d", "python3.9", "search.py", tmp_list, sys.argv[1]])
         count += 1
         print("Total tmux sessions created: ", count)
         tmp_list.clear()
