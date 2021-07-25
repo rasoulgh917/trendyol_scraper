@@ -5,7 +5,7 @@ from random import randint
 import asyncio
 from save_to_db import import_product
 
-def translate_product(product_dict, dest, tablename):
+def translate_product(product_dict, dest):
     product_dict['product_name'] = translator(
         product_dict['product_name'], dest)
     product_dict['product_category'] = translator(
@@ -39,5 +39,5 @@ def translate_product(product_dict, dest, tablename):
                     var['variant_name'] = translator(var['variant_name'], dest)
                 attr['product_name'] = translator(attr['product_name'], dest)
 
-    import_product(f"{dest}_{tablename}", product_dict)
+    return product_dict
 
