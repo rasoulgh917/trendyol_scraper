@@ -128,3 +128,5 @@ async def caller(subcat_list, tablename):
 
 def main(subcat_list, tablename):
     asyncio.run(caller(subcat_list, tablename))
+
+main(sys.argv[1], sys.argv[2])
