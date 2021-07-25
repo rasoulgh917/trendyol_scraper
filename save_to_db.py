@@ -18,7 +18,8 @@ def import_product(tablename, product_dict):
         product.groups_summary = str(product_dict['groups_summary']).encode()
         product.product_seller_id = str(product_dict['product_seller']['id']).encode()
         product.product_seller_name = str(product_dict['product_seller']['name']).encode()
-        product.product_seller_score = str(product_dict['product_seller']['sellerScore'])
+        # product.product_seller_score = str(product_dict['product_seller']['sellerScore'])
+        product.product_seller_score = None
         product.product_url = str(product_dict['product_url']).encode()
         product.product_variant = str(product_dict['variants']).encode()
         product.product_id = str(product_dict['product_id']).encode()
@@ -28,8 +29,8 @@ def import_product(tablename, product_dict):
         session = Session()
         session.add(product)
         session.commit()
-    except Exception as exc:
-        if exc == 'sellerScore':
-            product.product_seller_score = None
+    # except Exception as exc:
+    #     if exc == 'sellerScore':
+    #         product.product_seller_score = None
     except IntegrityError:
         session.rollback()
