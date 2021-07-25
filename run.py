@@ -30,6 +30,6 @@ time_file.write(
     f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
 time_file.close()
 for each in subcat_list:
-    os.system(f"""tmux new -d "python3.9 search.py {each} {tablename}" """)
+    os.system(f"""tmux new -d "python3.9 search.py {each} {sys.argv[1]}" """)
     count += 1
     print("Total tmux sessions created: ", count)
