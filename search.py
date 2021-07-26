@@ -78,5 +78,5 @@ async def caller(subcat_list, tablename):
     time_file = open("time_log.log", "a")
     time_file.write(f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: FINISHED SCRAPING\n\n")
 
-def main(subcat_list, tablename):
-    asyncio.run(caller(subcat_list, tablename))
+# def main(subcat_list, tablename):
+    # asyncio.run(caller(subcat_list, tablename))

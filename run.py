@@ -8,7 +8,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import subprocess
 import os
-from tasks import main_caller
+import asyncio
+from search import caller
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
@@ -31,10 +32,14 @@ time_file.write(
     f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
 time_file.close()
 tmp_list = []
+final_list = []
 for each in subcat_list:
     if len(tmp_list) == 3:
-        main_caller.delay(tmp_list, sys.argv[1])
-        count += 1
-        print("celery tasks created: ", count)
+        final_list.append(tmp_list)
         tmp_list.clear()
     tmp_list.append(each)
+
+async def main():
+    await asyncio.gather(*[caller(subcats, sys.argv[1]) for subcats in final_list])
+
+asyncio.run(main())

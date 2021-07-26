@@ -256,15 +256,6 @@ async def get_product_details(product_link, tablename):
     import_product(tablename, product_dict_final)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
     
-    
-    # print("Translation done")
-    # product_dict_final.update(translated_product[0])
-    # product_dict_final['translated_data'] = []
-    # product_dict_final['translated_data'].append(
-    #     {"language": "tr", "data": translated_product[2]})
-    # product_dict_final['translated_data'].append(
-    #     {"language": "en", "data": translated_product[1]})
-    
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:
