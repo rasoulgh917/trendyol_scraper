@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import subprocess
 import os
+from tasks import main_caller
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
@@ -31,11 +32,9 @@ time_file.write(
 time_file.close()
 tmp_list = []
 for each in subcat_list:
-    while len(tmp_list) == 3:
-        os.system(f"tmux new -d python3.9 search.py {tmp_list} {sys.argv[1]}")
+    if len(tmp_list) == 3:
+        main_caller.delay(tmp_list, sys.argv[1])
         count += 1
-        print("Total tmux sessions created: ", count)
+        print("celery tasks created: ", count)
         tmp_list.clear()
     tmp_list.append(each)
-
-input()

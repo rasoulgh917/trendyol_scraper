@@ -70,19 +70,13 @@ async def caller(subcat_list, tablename):
     time_file.write(
         f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
     time_file.close()
-    # await asyncio.sleep(0.1)
     await asyncio.gather(*[list_results(subcat, tablename) for subcat in subcat_list])
     await asyncio.gather(*[get_products(page, tablename) for page in async_pages])
     print("Final Step: Getting product infos, products count: ", len(async_products))
     await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
-    # asyncio.run(products_caller(async_pages, tablename))
-    # await products_caller(async_pages, tablename)
     time_ = datetime.now()
     time_file = open("time_log.log", "a")
     time_file.write(f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: FINISHED SCRAPING\n\n")
 
 def main(subcat_list, tablename):
     asyncio.run(caller(subcat_list, tablename))
-
-subcat_list = literal_eval(sys.argv[1])
-main(subcat_list, sys.argv[2])
