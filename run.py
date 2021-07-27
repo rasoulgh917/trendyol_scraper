@@ -33,13 +33,13 @@ time_file.write(
 time_file.close()
 tmp_list = []
 final_list = []
-for each in subcat_list:
-    if len(tmp_list) == 5:
-        final_list.append(tmp_list)
-        tmp_list.clear()
-    tmp_list.append(each)
+# for each in subcat_list:
+#     if len(tmp_list) == 5:
+#         final_list.append(tmp_list)
+#         tmp_list.clear()
+#     tmp_list.append(each)
 
 async def main():
-    await asyncio.gather(*[caller(subcats, sys.argv[1]) for subcats in final_list])
+    await asyncio.gather(*[caller(subcat, sys.argv[1]) for subcat in subcat_list])
 
 asyncio.run(main())
