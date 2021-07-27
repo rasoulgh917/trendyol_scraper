@@ -218,7 +218,7 @@ async def get_product_details(product_link, tablename):
             merchant_product_json = get_details_raw_json(
                 merchant_dict['product_url'])
             if merchant_product_json == 404:
-                merchant_dict['product_variants'] = {'error': 'Not found'}
+                merchant_dict['product_variants'] = []
             merchant_dict['product_variants'] = get_product_variants(
                 merchant_product_json)
     except KeyError:
