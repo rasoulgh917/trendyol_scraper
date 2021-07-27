@@ -39,7 +39,7 @@ async def get_products(page_link, tablename):
         product_link = urlunparse(
             ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
         async_products.append(product_link)
-        print("Products added to scraping list: ", len(async_products), "\r", end="")
+        print(random.randint(1,999), ": Products added to scraping list: ", len(async_products))
     return async_products
 
 def list_results(link):
