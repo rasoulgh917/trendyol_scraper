@@ -28,8 +28,7 @@ rq.headers = headers_.headers_rq
 async def get_products(page_link, tablename):
     async_products = []
     product_list = []
-    await asyncio.sleep(0.1)
-    product_rq = rq.get(page_link)
+    product_rq = await rq.get(page_link)
     try:
         product_list = product_rq.json()['result']['products']
     except Exception as exc:
@@ -40,7 +39,8 @@ async def get_products(page_link, tablename):
             ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
         async_products.append(product_link)
         print(random.randint(1,999), ": Products added to scraping list: ", len(async_products))
-    return async_products
+    await asyncio.gather(*[get_product_details(link, tablename) for link in async_products])
+    return 1
 
 def list_results(link):
     async_pages = []
@@ -71,8 +71,7 @@ async def caller(subcat, tablename):
     time_file.write(
         f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
     time_file.close()
-    async_products_final = await asyncio.gather(*[get_products(page, tablename) for page in list_results(subcat)])
-    await asyncio.gather(*[get_product_details(link, tablename) for link in async_products_final])
+    await asyncio.gather(*[get_products(page, tablename) for page in list_results(subcat)])
     time_ = datetime.now()
     time_file = open("time_log.log", "a")
     time_file.write(f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: FINISHED SCRAPING\n\n")
