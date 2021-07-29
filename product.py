@@ -148,7 +148,7 @@ def get_product_attr(attr_dict):
     return attr_list
         
 
-async def get_product_details(product_link, tablename):
+async def get_product_details(product_link, tablename, langs_dict):
     # Get product details json
     product_json = await get_details_raw_json(product_link)
     if product_json == 404:
@@ -251,11 +251,11 @@ async def get_product_details(product_link, tablename):
     print(randint(1, 999),": Translating")
     if TRANSLATE == True:
         for language in TRANS_LANGS:
-            translated_product = translate_product(product_dict_final, language)
-            import_product(f"{language}_{tablename}", translated_product)
+            for each in langs_dict:
+                if each == language:
+                    translate_product(product_dict_final, language, langs_dict[each])
     import_product(tablename, product_dict_final)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
-    
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:

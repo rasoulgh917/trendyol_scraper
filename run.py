@@ -10,6 +10,8 @@ import subprocess
 import os
 import asyncio
 from search import caller
+from config import TRANS_LANGS
+from redis import Redis
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
@@ -40,6 +42,9 @@ final_list = []
 #     tmp_list.append(each)
 
 async def main():
-    await asyncio.gather(*[caller(subcat, sys.argv[1]) for subcat in subcat_list])
+    langs_dict = {}
+    for i in range(len(TRANS_LANGS)):
+        langs_dict[TRANS_LANGS[i] = Redis(host=REDIS_SERVER_HOST, port=REDIS_SERVER_PORT, db=i)
+    await asyncio.gather(*[caller(subcat, sys.argv[1], langs_dict) for subcat in subcat_list])
 
 asyncio.run(main())
