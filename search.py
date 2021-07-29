@@ -39,7 +39,7 @@ async def get_products(page_link, tablename, langs_dict):
         product_link = urlunparse(
             ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
         async_products.append(product_link)
-        print(random.randint(1,999), ": Products added to scraping list: ", len(async_products))
+    print(random.randint(1,999), ": Products added to scraping list: ", len(async_products))
     await asyncio.gather(*[get_product_details(link, tablename, langs_dict) for link in async_products])
     return 1
 
