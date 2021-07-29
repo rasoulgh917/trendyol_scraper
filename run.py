@@ -10,7 +10,7 @@ import subprocess
 import os
 import asyncio
 from search import caller
-from config import TRANS_LANGS
+from config import TRANS_LANGS, REDIS_SERVER_HOST, REDIS_SERVER_PORT
 from redis import Redis
 
 adapter = HTTPAdapter(max_retries=Retry(3))
