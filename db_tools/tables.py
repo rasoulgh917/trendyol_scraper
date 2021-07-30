@@ -16,7 +16,7 @@ def create(tablename):
         product_images = Column(
             String(4294967295, collation='utf8mb4_general_ci'), nullable=True)
         product_brand = Column(
-            VARCHAR(255, collation='utf8mb4_turkish_ci'), nullable=True)
+            VARCHAR(255, collation='utf8mb4_general_ci'), nullable=True)
         product_category = Column(
             VARCHAR(255, collation='utf8mb4_general_ci'), nullable=True)
         product_url = Column(
