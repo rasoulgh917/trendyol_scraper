@@ -38,6 +38,5 @@ def translate_product(product_dict, dest, re):
                 for var in attr['attribute_variants']:
                     var['variant_name'] = translator(var['variant_name'], dest, re)
                 attr['product_name'] = translator(attr['product_name'], dest, re)
-    import_product(f"{dest}_{tablename}", product_dict)
-    return 1
+    return product_dict
 
