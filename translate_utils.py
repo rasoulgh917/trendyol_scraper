@@ -5,7 +5,7 @@ from random import randint
 import asyncio
 from save_to_db import import_product
 
-def translate_product(product_dict, dest, re):
+async def translate_product(product_dict, dest, re):
     product_dict['product_name'] = translator(
         product_dict['product_name'], dest, re)
     product_dict['product_category'] = translator(

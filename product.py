@@ -254,7 +254,8 @@ async def get_product_details(product_link, tablename, langs_dict):
         for language in TRANS_LANGS:
             for each in langs_dict:
                 if each == language:
-                    import_product(f"{language}_{tablename}", translate_product(product_dict_final, language, langs_dict[each]))
+                    translated_product = await translate_product(product_dict_final, language, langs_dict[each])
+                    import_product(f"{language}_{tablename}", translated_product)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
     try:
         get_sim_cross.runner_func(product_dict_final['product_id'])
