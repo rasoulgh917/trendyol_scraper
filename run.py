@@ -40,11 +40,16 @@ final_list = []
 #         final_list.append(tmp_list)
 #         tmp_list.clear()
 #     tmp_list.append(each)
-
+first_part = int(sys.argv[2])
+try:
+    sec_part = int(sys.argv[3])
+except:
+    sec_part = None
+    
 async def main():
     langs_dict = {}
     for i in range(len(TRANS_LANGS)):
         langs_dict[TRANS_LANGS[i]] = Redis(host=REDIS_SERVER_HOST, port=REDIS_SERVER_PORT, db=i)
-    await asyncio.gather(*[caller(subcat, sys.argv[1], langs_dict) for subcat in subcat_list[int(sys.argv[2]):int(sys.argv[3])]])
+    await asyncio.gather(*[caller(subcat, sys.argv[1], langs_dict) for subcat in subcat_list[first_part:sec_part]])
 
 asyncio.run(main())
