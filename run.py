@@ -45,6 +45,6 @@ async def main():
     langs_dict = {}
     for i in range(len(TRANS_LANGS)):
         langs_dict[TRANS_LANGS[i]] = Redis(host=REDIS_SERVER_HOST, port=REDIS_SERVER_PORT, db=i)
-    await asyncio.gather(*[caller(subcat, sys.argv[1], langs_dict) for subcat in subcat_list])
+    await asyncio.gather(*[caller(subcat, sys.argv[1], langs_dict) for subcat in subcat_list[int(sys.argv[2]):int(sys.argv[3])]])
 
 asyncio.run(main())
