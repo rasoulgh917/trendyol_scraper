@@ -20,6 +20,7 @@ from sqlalchemy import select
 import headers_
 from config import TRANSLATE, TRANS_LANGS
 from save_to_db import import_product
+import zlib
 
 #requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
@@ -149,6 +150,7 @@ def get_product_attr(attr_dict):
         
 
 async def get_product_details(product_link, tablename, langs_dict):
+    product_link = zlib.decompress(product_link).decode()
     # Get product details json
     product_json = await get_details_raw_json(product_link)
     if product_json == 404:

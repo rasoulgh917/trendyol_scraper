@@ -18,6 +18,7 @@ import asyncio
 import random
 import headers_
 from ast import literal_eval
+import zlib
 
 adapter = HTTPAdapter(max_retries=Retry(3))
 rq = requests.Session()
@@ -38,7 +39,9 @@ async def get_products(page_link, tablename, langs_dict):
         product_link_parsed = urlparse(product['url'])
         product_link = urlunparse(
             ('https', 'www.trendyol.com', product_link_parsed.path, '', product_link_parsed.query, ''))
-        async_products.append(product_link)
+        async_products.append(zlib.compress(product_link.encode()))
+    if len(async_products) == 0:
+        return 1
     print(random.randint(1,999), ": Products added to scraping list: ", len(async_products))
     await asyncio.gather(*[get_product_details(link, tablename, langs_dict) for link in async_products])
     return 1
@@ -53,17 +56,12 @@ def list_results(link):
         link_path = urlunparse(('', '', urlparse(link).path, '', '?', ''))
     for i in range(1, 208):
         page_link_path = link_path + "&pi=" + str(i)
-        try:
-            #product_rq = rq.get(
-                #f'https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA')
-            async_pages.append(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A")
-        except Exception as exc:
-            logger(exc, mode='exception')
-            logger(
-                "Failed to connect to trendyol for product search results fetch, retrying ...")
-            #product_rq = rq.get(
-                #f'https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA')
-            async_pages.append(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A")
+        #product_rq = rq.get(
+            #f'https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA')
+        #async_pages.append(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A")
+        #product_rq = rq.get(
+            #f'https://api.trendyol.com/websearchgw/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=0&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA')
+        async_pages.append(zlib.compress(f"https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll{page_link_path}&storefrontId=1&culture=tr-TR&userGenderId=1&pId=lE2NCQRpRH&scoringAlgorithmId=2&categoryRelevancyEnabled=false&isLegalRequirementConfirmed=false&searchStrategyType=DEFAULT&productStampType=TypeA&searchTestTypeAbValue=A".encode()))
     return async_pages
 
 async def caller(subcat, tablename, langs_dict):
@@ -72,7 +70,7 @@ async def caller(subcat, tablename, langs_dict):
     time_file.write(
         f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: STARTED SCRAPING\n\n")
     time_file.close()
-    await asyncio.gather(*[get_products(page, tablename, langs_dict) for page in list_results(subcat)])
+    await asyncio.gather(*[get_products(zlib.decompress(page).decode(), tablename, langs_dict) for page in list_results(subcat)])
     time_ = datetime.now()
     time_file = open("time_log.log", "a")
     time_file.write(f"{time_.day}/{time_.month}/{time_.year} AT {time_.hour}:{time_.minute}:{time_.second}: FINISHED SCRAPING\n\n")
