@@ -11,12 +11,8 @@ from logger_ import logger
 import json
 from translate_utils import translate_product
 from random import randint
-import get_sim_cross
+# import get_sim_cross
 import asyncio
-from db_tools import tables, engines
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy import select
 import headers_
 from config import TRANSLATE, TRANS_LANGS
 from save_to_db import import_product
@@ -260,7 +256,7 @@ async def get_product_details(product_link, tablename, langs_dict):
                     import_product(f"{language}_{tablename}", translated_product)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
     try:
-        get_sim_cross.runner_func(product_dict_final['product_id'])
+        #get_sim_cross.runner_func(product_dict_final['product_id'])
     except KeyError:
         pass
     # Return Product details dictionary
