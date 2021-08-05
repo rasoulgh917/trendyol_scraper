@@ -255,9 +255,9 @@ async def get_product_details(product_link, tablename, langs_dict):
                     translated_product = translate_product(product_dict_final, language, langs_dict[each])
                     import_product(f"{language}_{tablename}", translated_product)
     print("\n",randint(1, 999),": Imported product to db\r", end="")
-    try:
-        #get_sim_cross.runner_func(product_dict_final['product_id'])
-    except KeyError:
-        pass
+    # try:
+    #     #get_sim_cross.runner_func(product_dict_final['product_id'])
+    # except KeyError:
+    #     pass
     # Return Product details dictionary
     return 1
