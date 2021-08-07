@@ -5,7 +5,7 @@ import json
 
 def import_product(tablename, product_dict):
     try:
-        product = tables.create(tablename)
+        product = tables.Product()
         product.product_name = str(product_dict['product_name']).encode()
         product.product_images = str(product_dict['product_images']+product_dict['description_images']).encode()
         product.product_brand = str(product_dict['product_brand']).encode()
