@@ -1,4 +1,4 @@
-from logger_ import logger
+from logger import logger
 from translate_utils import translate_product
 import requests
 from requests.adapters import HTTPAdapter

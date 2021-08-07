@@ -5,7 +5,7 @@ import json
 import sys
 from urllib.parse import urlparse, urlunparse
 from translate import translator
-from logger_ import logger
+from logger import logger
 
 requests_cache.install_cache('cache', 'sqlite', 120)
 

@@ -1,4 +1,4 @@
-from logger_ import logger
+from logger import logger
 try:
     from deep_translator import GoogleTranslator
 except:

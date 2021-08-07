@@ -7,7 +7,7 @@ from requests.packages.urllib3.util.retry import Retry
 from urllib.parse import urlparse, urlunparse
 import json
 from translate import translator
-from logger_ import logger
+from logger import logger
 import json
 from translate_utils import translate_product
 from random import randint

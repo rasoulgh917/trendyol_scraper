@@ -5,7 +5,7 @@ from datetime import datetime
 import get_sim_cross
 from save_to_db import import_product
 from save_to_json import to_json
-from logger_ import logger
+from logger import logger
 from product import get_product_details
 from config import TRANSLATE
 from translate import translator
