@@ -1,6 +1,6 @@
 from translate import translator
 from config import TRANSLATE, TRANS_LANGS
-from logger_ import logger
+from logger import logger
 from random import randint
 import asyncio
 from save_to_db import import_product

@@ -1,5 +1,5 @@
 import json
-from logger_ import logger
+from logger import logger
 from os import path
 
 def to_json(p_dict, filename, cnt):
