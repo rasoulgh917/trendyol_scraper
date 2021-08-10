@@ -1,22 +1,18 @@
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import requests
-import get_sim_cross
 from save_to_db import import_product
 from save_to_json import to_json
 from logger import logger
 from product import get_product_details
 from config import TRANSLATE
-from translate import translator
 from urllib.parse import urlparse, urlunparse
 import sys
 import json
 from bs4 import BeautifulSoup
-import aiohttp
 import asyncio
 import random
 import headers_
-from ast import literal_eval
 async_products = []
 
 adapter = HTTPAdapter(max_retries=Retry(3))
