@@ -29,10 +29,8 @@ def import_product(tablename, product_dict):
         session = Session()
         session.add(product)
         session.commit()
-        session.close()
     # except Exception as exc:
     #     if exc == 'sellerScore':
     #         product.product_seller_score = None
     except IntegrityError:
         session.rollback()
-        session.close()
