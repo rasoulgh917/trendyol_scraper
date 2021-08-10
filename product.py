@@ -16,7 +16,6 @@ import asyncio
 import headers_
 from config import TRANSLATE, TRANS_LANGS
 from save_to_db import import_product
-import zlib
 
 #requests_cache.install_cache('cache', 'sqlite', 120)
 adapter = HTTPAdapter(max_retries=Retry(3))
@@ -26,7 +25,7 @@ rq.mount('https', adapter)
 rq.headers = headers_.headers_rq
 
 
-async def get_details_raw_json(product_link):
+def get_details_raw_json(product_link):
     # Send request to product endpoint
     try:
         req = rq.get(product_link)
@@ -45,8 +44,7 @@ async def get_details_raw_json(product_link):
     except:
         return 404
     try:
-        details_json_str = details_script.partition("{")[2].partition(";")[0]
-        details_json = json.loads(("{"+details_json_str))
+        details_json = json.loads("{"+(details_script.partition("{")[2].partition(";")[0]))
     except json.decoder.JSONDecodeError:
         return 404
 
@@ -145,10 +143,10 @@ def get_product_attr(attr_dict):
     return attr_list
         
 
-async def get_product_details(product_link, tablename, langs_dict):
-    product_link = zlib.decompress(product_link).decode()
+async def get_product_details(product_link, tablename, langs_dict, product_re):
+    product_link = product_link
     # Get product details json
-    product_json = await get_details_raw_json(product_link)
+    product_json = get_details_raw_json(product_link)
     if product_json == 404:
         return None
 
