@@ -5,7 +5,6 @@ import json
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Integer, String, Column, VARCHAR, SmallInteger
 from sqlalchemy.dialects.mysql import LONGTEXT
-from .engines import engine
 
 Base = declarative_base()
 
