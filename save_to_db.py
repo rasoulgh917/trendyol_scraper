@@ -6,9 +6,9 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy import Integer, String, Column, VARCHAR, SmallInteger
 from sqlalchemy.dialects.mysql import LONGTEXT
 
-Base = declarative_base()
 
 def import_product(tablename, product_dict):
+    Base = declarative_base()
     class Product(Base):
         __tablename__ = tablename
         id = Column(Integer, primary_key=True)
