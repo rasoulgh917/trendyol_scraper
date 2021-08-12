@@ -23,7 +23,7 @@ rq.headers = headers_.headers_rq
 
 async def get_products(page_link, tablename, langs_dict):
     product_list = []
-    await asyncio.sleep(0.1)
+    await asyncio.sleep(0)
     product_rq = rq.get(page_link)
     try:
         product_list = product_rq.json()['result']['products']

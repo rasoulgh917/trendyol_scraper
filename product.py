@@ -144,6 +144,7 @@ def get_product_attr(attr_dict):
         
 
 async def get_product_details(product_link, tablename, langs_dict, product_re):
+    await asyncio.sleep(0)
     product_link = product_link
     # Get product details json
     product_json = get_details_raw_json(product_link)
