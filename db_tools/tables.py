@@ -59,5 +59,5 @@ class Checker(Base):
     __tablename__ = CHECKER_TABLE_NAME
 
     id = Column(Integer, primary_key=True)
-    name = Column(
+    title = Column(
         String(4294967295, collation='utf8mb4_general_ci'), nullable=True)

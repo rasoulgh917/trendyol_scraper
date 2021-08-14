@@ -195,12 +195,9 @@ async def get_product_details(product_link, tablename, langs_dict, product_re):
         except:
             product_group_json = []
         if product_group_json != []:
-            try:
-                # product_dict_final['product_groups'] = get_product_group_stock(product_group_json)
-                product_dict_final['groups_summary'] = get_product_group_stock_sum(
-                    product_group_json, product_json['configuration']['cdnUrl'])
-            except KeyError:
-                pass
+            # product_dict_final['product_groups'] = get_product_group_stock(product_group_json)
+            product_dict_final['groups_summary'] = get_product_group_stock_sum(
+                product_group_json, product_json['configuration']['cdnUrl'])
         else:
             product_dict_final['groups_summary'] = []
         try:
