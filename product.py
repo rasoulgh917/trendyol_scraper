@@ -120,7 +120,7 @@ def get_product_group_stock_sum(product_group_dict, image_cdn):
                 for content in each['contents']:
                     attributes_dict['product_images'] = convert_img_links(
                         [content['imageUrl']], image_cdn)
-                    attributes_dict['product_id'] = content['product_id']
+                    attributes_dict['product_id'] = content['id']
                     attributes_dict['product_name'] = content['name']
                     attributes_dict['product_price'] = content['price']
                     attributes_dict['product_url'] = content['url']
