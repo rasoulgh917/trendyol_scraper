@@ -69,8 +69,13 @@ def import_product(tablename, product_dict):
         product.product_url = str(product_dict['product_url']).encode()
         product.product_variant = str(product_dict['variants']).encode()
         product.product_id = str(product_dict['product_id']).encode()
-        product.stock_count = str(product_dict['variants'][0]['variant_stock_count']).encode()
-        product.stock_status = str(product_dict['variants'][0]['variant_stock_status']).encode()
+        try:
+            product.stock_count = str(product_dict['variants'][0]['variant_stock_count']).encode()
+            product.stock_status = str(product_dict['variants'][0]['variant_stock_status']).encode()
+        except:
+            o = open("failed_products", "a")
+            o.write(f"\n{product_dict['product_url']}")
+            o.close()
         Session = sessionmaker(bind=engines.engine)
         session = Session()
         session.add(product)

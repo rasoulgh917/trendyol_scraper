@@ -258,5 +258,4 @@ async def get_product_details(product_link, tablename, langs_dict, product_re):
     #     #get_sim_cross.runner_func(product_dict_final['product_id'])
     # except KeyError:
     #     pass
-    # Return Product details dictionary
     return 1
