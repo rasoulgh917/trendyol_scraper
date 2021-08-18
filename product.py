@@ -166,6 +166,7 @@ async def get_product_details(product_link, tablename, langs_dict, product_re):
     try:
         product_dict_final['product_color'] = product_json['product']['color']
     except KeyError:
+        product_dict_final['product_color'] = None
         pass
     product_dict_final['product_name'] = product_json['product']['name']
     product_dict_final['product_name'].lower().replace("trendyol", "brandyto")
