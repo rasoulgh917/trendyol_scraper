@@ -153,8 +153,12 @@ async def get_product_details(product_link, tablename, langs_dict, product_re):
 
     # Create a dictionary for storing product details
     product_dict_final = {}
-
-    product_dict_final['product_id'] = product_json['product']['id']
+    try:
+        product_dict_final['product_id'] = product_json['product']['id']
+    except:
+        o = open("failed_json", "w")
+        o.write(str(product_json))
+        o.close()
     product_dict_final['variants'] = get_product_variants(product_json)
 
     product_dict_final['product_category'] = product_json['product']['category']['name']
