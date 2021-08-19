@@ -45,7 +45,7 @@ def import_product(tablename, product_dict):
         stock_count = Column(
             VARCHAR(5, collation='utf8mb4_general_ci'), nullable=True)
         delivery_info = Column(
-            VARCHAR(255, collation='utf8mb4_general_ci'), nullable=True)
+            LONGTEXT(collation='utf8mb4_general_ci'), nullable=True)
         product_variant = Column(
             LONGTEXT(collation='utf8mb4_general_ci'), nullable=True)
         groups_summary = Column(
